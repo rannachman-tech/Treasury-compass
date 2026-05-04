@@ -351,3 +351,83 @@ export function fmtMoney(amount: number, currency: RegionData["currency"]): stri
 export function currencySymbol(currency: RegionData["currency"]): string {
   return currency === "USD" ? "$" : currency === "EUR" ? "€" : currency === "GBP" ? "£" : "$";
 }
+
+// ─────────────────────────────────────────────────────────────────
+// Source tier — explicit per-row labels for the comparator/alts
+// ─────────────────────────────────────────────────────────────────
+
+export type SourceTier =
+  | "govt"     // Constant-maturity / sovereign yield (FRED DGS, Bunds, Gilts)
+  | "topTier"  // Curated best-in-market (HYSA, brokered CDs, NS&I, ISA, etc.)
+  | "etf"      // ETF wrapper market quote (UCITS rows)
+  | "mmf";     // Money-market fund 7-day yield
+
+export const SOURCE_TIER_LABEL: Record<SourceTier, string> = {
+  govt:    "Govt yield",
+  topTier: "Top tier",
+  etf:     "ETF quote",
+  mmf:     "MMF yield",
+};
+
+export const SOURCE_TIER_HINT: Record<SourceTier, string> = {
+  govt:    "Sovereign yield (FRED constant-maturity / Bund / Gilt). Auction-truth at issue, secondary-market thereafter.",
+  topTier: "Curated best-in-market rate from leading providers. Verified periodically — not the FDIC national average.",
+  etf:     "ETF market quote (UCITS). Trades intraday; price moves with rates and FX.",
+  mmf:     "Money-market fund 7-day yield, daily-liquid. Resets daily.",
+};
+
+export function rowSourceTier(row: ComparatorRow): SourceTier {
+  // Coverage carries most of the signal.
+  if (row.coverage === "MMF") return "mmf";
+  if (row.coverage === "Treasury" || row.coverage === "Sovereign") {
+    // ETF wrappers tracking sovereigns (Global region's UCITS rows)
+    if (/UCITS|ETF|\(IB01|\(AGGU|\(EUNA|\(DTLA|\(IS3M|\(IBCI|\(XY4P|\(ERNS|\(SYBG/i.test(row.vehicle))
+      return "etf";
+    return "govt";
+  }
+  // Bank deposits — curated top tier
+  if (row.coverage === "FDIC" || row.coverage === "FSCS" || row.coverage === "Deposit-EU")
+    return "topTier";
+  return "topTier";
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Expense-ratio map — bps deducted in "Net of fees" mode
+// ─────────────────────────────────────────────────────────────────
+
+/** Per-symbol expense ratios in basis points. Matched against ComparatorRow.vehicle text. */
+const EXPENSE_RATIOS_BPS: Array<[RegExp, number]> = [
+  [/\bBIL\b/, 14],
+  [/\bSHV\b/, 15],
+  [/\bIEF\b/, 15],
+  [/\bTLT\b/, 15],
+  [/\bTIP\b/, 19],
+  [/\bIS3M\b/, 9],
+  [/\bIBCI\b/, 9],
+  [/\bEUNA\b/, 10],
+  [/\bXY4P\b/, 15],
+  [/\bERNS\b/, 9],
+  [/\bSYBG\b/, 15],
+  [/\bAGGU\b/, 10],
+  [/\bDTLA\b/, 7],
+  [/\bIB01\b/, 7],
+  [/\bIGLN\b/, 12],
+  [/Ultrashort ETF|UCITS\)?$/i, 10],
+  [/Treasury MMF|MMF \(Treasury\)/i, 10],
+  [/MMF \(Prime\)|EUR MMF|GBP MMF/i, 11],
+  [/Money-market|MMF/i, 10],
+];
+
+/** Look up expense ratio in bps. 0 if no wrapper (direct Treasury, deposit). */
+export function expenseRatioBps(row: ComparatorRow): number {
+  const tier = rowSourceTier(row);
+  // Direct sovereign holdings + deposits have no wrapper fee that the saver pays.
+  if (tier === "govt" || tier === "topTier") {
+    // ...except top-tier rows that are clearly funds.
+    if (!/MMF|UCITS|ETF/i.test(row.vehicle)) return 0;
+  }
+  for (const [re, bps] of EXPENSE_RATIOS_BPS) {
+    if (re.test(row.vehicle)) return bps;
+  }
+  return 0;
+}

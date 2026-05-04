@@ -33,11 +33,11 @@ export function Header({ mode, onModeChange }: Props) {
               <Compass size={16} strokeWidth={1.75} />
             </span>
             <div className="leading-tight min-w-0">
-              <div className="text-[14px] font-semibold tracking-tight text-fg truncate">
-                Treasury Yield Compass
+              <div className="text-[15px] font-semibold tracking-tight text-fg truncate">
+                BondSpace<span className="text-accent">.</span>
               </div>
               <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-fg-subtle hidden sm:block">
-                Where to park cash · live
+                Make sense of bonds
               </div>
             </div>
           </a>

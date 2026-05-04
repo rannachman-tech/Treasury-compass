@@ -10,6 +10,7 @@ import {
   BUCKETS,
   bucketYears,
   currencySymbol,
+  expenseRatioBps,
   fmtMoney,
   growthPoints,
   plainEnglishCatch,
@@ -18,6 +19,9 @@ import {
   plainEnglishTax,
   projectValue,
   rateTemperature,
+  rowSourceTier,
+  SOURCE_TIER_HINT,
+  SOURCE_TIER_LABEL,
   type Bucket,
 } from "@/lib/simple";
 
@@ -171,14 +175,8 @@ export function SimpleHero({
                 {alternatives.map((alt) => {
                   const altValue = projectValue(amount, alt.apy, years);
                   const delta = altValue - futureValue;
-                  const lane =
-                    alt.coverage === "Treasury" || alt.coverage === "Sovereign"
-                      ? "Government"
-                      : alt.coverage === "FDIC" || alt.coverage === "FSCS" || alt.coverage === "Deposit-EU"
-                      ? "Bank"
-                      : alt.coverage === "MMF"
-                      ? "Money-market"
-                      : "Market-priced";
+                  const tier = rowSourceTier(alt);
+                  const erBps = expenseRatioBps(alt);
                   return (
                     <div
                       key={alt.vehicle}
@@ -193,8 +191,19 @@ export function SimpleHero({
                             {alt.apy.toFixed(2)}%
                           </span>
                         </div>
-                        <p className="mt-0.5 text-[10.5px] text-fg-subtle truncate">
-                          {lane} · {alt.lockup}
+                        <p
+                          className="mt-0.5 flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-fg-subtle"
+                          title={SOURCE_TIER_HINT[tier]}
+                        >
+                          <span>{SOURCE_TIER_LABEL[tier]}</span>
+                          <span className="text-border-strong">·</span>
+                          <span className="truncate normal-case tracking-normal font-sans">{alt.lockup}</span>
+                          {erBps > 0 && (
+                            <>
+                              <span className="text-border-strong">·</span>
+                              <span className="tabular">−{erBps}bp fee</span>
+                            </>
+                          )}
                         </p>
                       </div>
                       <div className="text-right shrink-0">
@@ -219,24 +228,28 @@ export function SimpleHero({
           )}
         </div>
 
-        {/* RIGHT — live answer */}
-        <RecommendationCard
-          regionData={regionData}
-          bestRungName={bestRung.winner.name}
-          coverage={bestRung.winner.coverage}
-          yieldPct={bestRung.yield}
-          amount={amount}
-          futureValue={futureValue}
-          gain={gain}
-          years={years}
-          temperature={temp}
-          plainName={plainEnglishName(bestRung.winner)}
-          lockupLine={plainEnglishLockup(bestRung.winner, bucket)}
-          taxLine={plainEnglishTax(bestRung.winner)}
-          catchLine={plainEnglishCatch(bestRung.winner)}
-          basket={basketFor(horizon, region)}
-          onTrade={onTrade}
-        />
+        {/* RIGHT — eyebrow + live answer (mirrors left structure so frame
+             edges align with the bucket-card top, not with eyebrow text). */}
+        <div className="flex flex-col gap-2.5">
+          <p className="eyebrow">Best match for your money</p>
+          <RecommendationCard
+            regionData={regionData}
+            bestRungName={bestRung.winner.name}
+            coverage={bestRung.winner.coverage}
+            yieldPct={bestRung.yield}
+            amount={amount}
+            futureValue={futureValue}
+            gain={gain}
+            years={years}
+            temperature={temp}
+            plainName={plainEnglishName(bestRung.winner)}
+            lockupLine={plainEnglishLockup(bestRung.winner, bucket)}
+            taxLine={plainEnglishTax(bestRung.winner)}
+            catchLine={plainEnglishCatch(bestRung.winner)}
+            basket={basketFor(horizon, region)}
+            onTrade={onTrade}
+          />
+        </div>
       </section>
 
       {/* ─── SAFETY LANE MAP — full width ─── */}
@@ -298,11 +311,14 @@ function RecommendationCard({
   const sym = currencySymbol(regionData.currency);
 
   return (
-    <div className="card card-active p-5 sm:p-6 flex flex-col gap-4 fade-up">
+    <div className="card card-active p-5 sm:p-6 flex flex-col gap-4 fade-up flex-1">
       {/* Top badges */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-accent/12 border border-accent/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent">
-          ★ Best pick
+        <span
+          className="inline-flex items-center gap-1 rounded-full bg-accent/12 border border-accent/40 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent cursor-help"
+          title="Top yield × safety match for the chosen horizon. Net of fees and taxes is in the calculator below — this badge is a heuristic, not a recommendation."
+        >
+          ★ Best match
         </span>
         <SafetyBadge coverage={coverage} />
         <RateTemperature {...temperature} />

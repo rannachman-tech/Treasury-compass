@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import type { ComparatorRow, Horizon } from "@/lib/types";
-import { lockupDays } from "@/lib/simple";
+import {
+  expenseRatioBps,
+  lockupDays,
+  rowSourceTier,
+  SOURCE_TIER_HINT,
+  SOURCE_TIER_LABEL,
+} from "@/lib/simple";
 import { ArrowUpDown, ExternalLink, ShieldCheck, Landmark, Coins } from "lucide-react";
 
 interface Props {
@@ -28,14 +34,26 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("apy");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState<"all" | Horizon>("all");
+  const [netOfFees, setNetOfFees] = useState(false);
 
-  let display = [...rows];
+  const enriched = rows.map((r) => {
+    const tier = rowSourceTier(r);
+    const erBps = expenseRatioBps(r);
+    const netApy = r.apy - erBps / 100;
+    return { ...r, tier, erBps, netApy };
+  });
+
+  let display = [...enriched];
   if (filter !== "all") {
     display = display.filter((r) => matchHorizon(r.lockup, filter));
   }
   display.sort((a, b) => {
     const dir = sortDir === "asc" ? 1 : -1;
-    if (sortKey === "apy") return (a.apy - b.apy) * dir;
+    if (sortKey === "apy") {
+      const va = netOfFees ? a.netApy : a.apy;
+      const vb = netOfFees ? b.netApy : b.apy;
+      return (va - vb) * dir;
+    }
     if (sortKey === "lockup") return a.lockup.localeCompare(b.lockup) * dir;
     if (sortKey === "coverage") return a.coverage.localeCompare(b.coverage) * dir;
     return a.vehicle.localeCompare(b.vehicle) * dir;
@@ -61,24 +79,56 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
           </p>
         </div>
 
-        <div className="inline-flex rounded-md border border-border bg-surface-2 p-0.5 text-[11.5px]">
-          {(["all", "<3mo", "3-12mo", "1-5y", "5y+"] as const).map((f) => {
-            const active = f === filter || (f === "all" && filter === "all");
-            return (
-              <button
-                key={f}
-                onClick={() => setFilter(f === filter ? "all" : f)}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={netOfFees}
+            onClick={() => setNetOfFees((v) => !v)}
+            title="Subtract per-fund expense ratios from displayed APY. Direct sovereign holdings and bank deposits are unchanged."
+            className={[
+              "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11.5px] transition-colors",
+              netOfFees
+                ? "border-accent/50 bg-accent/10 text-accent"
+                : "border-border text-fg-muted hover:border-border-strong hover:text-fg",
+            ].join(" ")}
+          >
+            <span
+              aria-hidden
+              className={[
+                "relative h-3 w-6 rounded-full border transition-colors",
+                netOfFees ? "border-accent bg-accent" : "border-border-strong bg-border",
+              ].join(" ")}
+            >
+              <span
                 className={[
-                  "rounded-sm px-2 py-1 transition-colors",
-                  active
-                    ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.4)]"
-                    : "text-fg-muted hover:text-fg",
+                  "absolute top-px h-2 w-2 rounded-full bg-surface transition-all",
+                  netOfFees ? "left-[12px]" : "left-px",
                 ].join(" ")}
-              >
-                {f === "all" ? "All horizons" : f}
-              </button>
-            );
-          })}
+              />
+            </span>
+            Net of fees
+          </button>
+
+          <div className="inline-flex rounded-md border border-border bg-surface-2 p-0.5 text-[11.5px]">
+            {(["all", "<3mo", "3-12mo", "1-5y", "5y+"] as const).map((f) => {
+              const active = f === filter || (f === "all" && filter === "all");
+              return (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f === filter ? "all" : f)}
+                  className={[
+                    "rounded-sm px-2 py-1 transition-colors",
+                    active
+                      ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.4)]"
+                      : "text-fg-muted hover:text-fg",
+                  ].join(" ")}
+                >
+                  {f === "all" ? "All horizons" : f}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -90,7 +140,7 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
                 Vehicle
               </Th>
               <Th onClick={() => toggleSort("apy")} active={sortKey === "apy"} dir={sortDir} align="right">
-                APY
+                {netOfFees ? "Net APY" : "APY"}
               </Th>
               <Th onClick={() => toggleSort("lockup")} active={sortKey === "lockup"} dir={sortDir}>
                 Lockup
@@ -112,6 +162,7 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
               </tr>
             ) : display.map((r) => {
               const inActive = matchHorizon(r.lockup, activeHorizon);
+              const shownApy = netOfFees ? r.netApy : r.apy;
               return (
                 <tr
                   key={r.vehicle}
@@ -120,9 +171,22 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
                     inActive ? "bg-accent/5" : "",
                   ].join(" ")}
                 >
-                  <td className="px-3 py-2 font-medium text-fg">{r.vehicle}</td>
+                  <td className="px-3 py-2">
+                    <div className="font-medium text-fg leading-snug">{r.vehicle}</div>
+                    <div
+                      className="mt-0.5 inline-flex items-center text-[9.5px] font-mono uppercase tracking-wider text-fg-subtle"
+                      title={SOURCE_TIER_HINT[r.tier]}
+                    >
+                      {SOURCE_TIER_LABEL[r.tier]}
+                      {netOfFees && r.erBps > 0 && (
+                        <span className="ml-1.5 rounded border border-border bg-surface px-1 py-px tabular text-fg-subtle">
+                          −{r.erBps}bp fee
+                        </span>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-3 py-2 text-right tabular font-semibold">
-                    {r.apy.toFixed(2)}%
+                    {shownApy.toFixed(2)}%
                   </td>
                   <td className="px-3 py-2 text-fg-muted">{r.lockup}</td>
                   <td className="px-3 py-2">
@@ -152,9 +216,11 @@ export function ComparatorTable({ rows, activeHorizon }: Props) {
         </table>
       </div>
 
-      <p className="mt-2.5 text-[11px] text-fg-subtle">
-        Yields shown gross of fees. ETF wrappers carry small expense ratios (5–15bps)
-        but are tradeable through any broker, including eToro.
+      <p className="mt-2.5 text-[11px] leading-snug text-fg-subtle">
+        Source-tier labels: <span className="font-medium text-fg-muted">Govt yield</span> = sovereign series (FRED CMT, Bund, Gilt);
+        {" "}<span className="font-medium text-fg-muted">Top tier</span> = curated best-in-market (HYSA, brokered CDs, NS&amp;I);
+        {" "}<span className="font-medium text-fg-muted">ETF quote</span> = market price; <span className="font-medium text-fg-muted">MMF yield</span> = 7-day fund yield.
+        Toggle <span className="font-medium text-fg-muted">Net of fees</span> to subtract per-fund expense ratios — direct holdings and deposits are unaffected.
       </p>
     </section>
   );

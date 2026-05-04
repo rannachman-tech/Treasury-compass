@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { ComparatorRow, Horizon, RegionData } from "@/lib/types";
-import { lockupDays } from "@/lib/simple";
+import { expenseRatioBps, lockupDays } from "@/lib/simple";
 import { Calculator as CalcIcon, Info } from "lucide-react";
 
 interface Props {
@@ -54,6 +54,7 @@ export function Calculator({ rows, defaultHorizon, regionData }: Props) {
   const [primaryRate, setPrimaryRate] = useState(tax.primaryDefault);
   const [secondaryRate, setSecondaryRate] = useState(tax.secondaryDefault);
   const [realAdjusted, setRealAdjusted] = useState(false);
+  const [feesAdjusted, setFeesAdjusted] = useState(true);
 
   // Reset tax defaults when region changes.
   useEffect(() => {
@@ -76,7 +77,9 @@ export function Calculator({ rows, defaultHorizon, regionData }: Props) {
   const computed = useMemo(() => {
     return candidates
       .map((r) => {
-        const headlineApy = r.apy / 100;
+        const erBps = expenseRatioBps(r);
+        const feeAdj = feesAdjusted ? erBps / 10000 : 0;
+        const headlineApy = r.apy / 100 - feeAdj;
         const effTax = taxAdjusted
           ? primaryRate / 100 +
             (r.secondaryTaxFree ? 0 : (tax.secondaryLabel ? secondaryRate / 100 : 0))
@@ -91,6 +94,7 @@ export function Calculator({ rows, defaultHorizon, regionData }: Props) {
           vehicle: r.vehicle,
           coverage: r.coverage,
           apy: r.apy,
+          erBps,
           netRate: netRate * 100,
           gain: value - amount,
           value,
@@ -98,7 +102,7 @@ export function Calculator({ rows, defaultHorizon, regionData }: Props) {
         };
       })
       .sort((a, b) => b.value - a.value);
-  }, [candidates, amount, years, taxAdjusted, primaryRate, secondaryRate, realAdjusted, regionData.cpiYoy, tax.secondaryLabel]);
+  }, [candidates, amount, years, taxAdjusted, primaryRate, secondaryRate, realAdjusted, feesAdjusted, regionData.cpiYoy, tax.secondaryLabel]);
 
   const top = computed[0];
   const wedge = computed[computed.length - 1];
@@ -153,6 +157,7 @@ export function Calculator({ rows, defaultHorizon, regionData }: Props) {
 
       <div className="mt-3 flex flex-wrap items-center gap-2 text-[12px]">
         <Toggle label="Tax-adjusted" on={taxAdjusted} onChange={setTaxAdjusted} />
+        <Toggle label="Net of fees" on={feesAdjusted} onChange={setFeesAdjusted} />
         <Toggle
           label={`Inflation-adjusted (${regionData.cpiLabel} ${regionData.cpiYoy.toFixed(1)}%)`}
           on={realAdjusted}

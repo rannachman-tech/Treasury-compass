@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Treasury Yield Compass — where to park cash, right now",
+  title: "BondSpace. — make sense of bonds",
   description:
-    "A no-nonsense ladder of risk-free yields. T-bills, HYSA, MMFs, CDs, Treasury notes — ranked by horizon, with FDIC/SIPC, lockup, and tax treatment. Built for traders. Daily refresh.",
+    "Where to park cash, right now. T-bills, HYSA, MMFs, CDs, Treasury notes — ranked by horizon, with FDIC/SIPC, lockup, and tax treatment. Plain English. Daily refresh.",
   metadataBase: new URL("https://treasury-compass.etoro.app"),
   openGraph: {
-    title: "Treasury Yield Compass",
-    description: "What's the best safe place for my cash right now?",
+    title: "BondSpace.",
+    description: "Make sense of bonds — where to park cash, right now.",
     type: "website",
   },
   robots: { index: true, follow: true },
