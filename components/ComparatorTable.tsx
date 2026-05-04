@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ComparatorRow, Horizon } from "@/lib/types";
+import { lockupDays } from "@/lib/simple";
 import { ArrowUpDown, ExternalLink, ShieldCheck, Landmark, Coins } from "lucide-react";
 
 interface Props {
@@ -12,16 +13,14 @@ interface Props {
 type SortKey = "vehicle" | "apy" | "lockup" | "coverage";
 
 const matchHorizon = (lockup: string, h: Horizon): boolean => {
-  const l = lockup.toLowerCase();
+  const isDaily =
+    /^daily/i.test(lockup) && !/(min|until|avoid)/i.test(lockup);
+  const days = lockupDays(lockup);
   switch (h) {
-    case "<3mo":
-      return l.includes("daily") || /28|91|3 month|^[1-2] month/.test(l);
-    case "3-12mo":
-      return /182|364|6 month|12 month|3 month/.test(l) || /^1 yr/.test(l);
-    case "1-5y":
-      return /^[1-5] /.test(l) && (l.includes("year") || l.includes("yr"));
-    case "5y+":
-      return /^([5-9]|1[0-9]) /.test(l) && (l.includes("year") || l.includes("yr"));
+    case "<3mo":   return isDaily || days <= 91;
+    case "3-12mo": return !isDaily && days > 91 && days <= 365;
+    case "1-5y":   return days > 365 && days <= 1825;
+    case "5y+":    return days >= 1825;
   }
 };
 

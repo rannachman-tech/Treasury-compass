@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { ComparatorRow, Horizon, RegionData } from "@/lib/types";
+import { lockupDays } from "@/lib/simple";
 import { Calculator as CalcIcon, Info } from "lucide-react";
 
 interface Props {
@@ -25,16 +26,14 @@ const HORIZON_LABEL: Record<Horizon, string> = {
 };
 
 const matchHorizon = (lockup: string, h: Horizon): boolean => {
-  const l = lockup.toLowerCase();
+  const isDaily =
+    /^daily/i.test(lockup) && !/(min|until|avoid)/i.test(lockup);
+  const days = lockupDays(lockup);
   switch (h) {
-    case "<3mo":
-      return l.includes("daily") || /28|91|3 month|^[1-3] month/.test(l);
-    case "3-12mo":
-      return /182|364|6 month|12 month/.test(l) || /^1 year|^1 yr/.test(l);
-    case "1-5y":
-      return /^[1-5] /.test(l) || /^[1-5] year/.test(l);
-    case "5y+":
-      return /^([5-9]|10|1[0-9]) /.test(l);
+    case "<3mo":   return isDaily || days <= 91;
+    case "3-12mo": return !isDaily && days > 91 && days <= 365;
+    case "1-5y":   return days > 365 && days <= 1825;
+    case "5y+":    return days >= 1825;
   }
 };
 

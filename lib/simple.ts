@@ -214,10 +214,12 @@ export function lockupDays(lockup: string): number {
   if (/^daily/.test(l) && !/(min|until|avoid)/.test(l)) return 1;
 
   let max = 0;
-  for (const m of l.matchAll(/(\d+)\s*day/g)) max = Math.max(max, Number(m[1]));
-  for (const m of l.matchAll(/(\d+)\s*month/g)) max = Math.max(max, Number(m[1]) * 30);
-  for (const m of l.matchAll(/(\d+)\s*(year|yr)\b/g)) max = Math.max(max, Number(m[1]) * 365);
-  for (const m of l.matchAll(/(\d+)y\b/g)) max = Math.max(max, Number(m[1]) * 365);
+  // Plurals require an optional `s?` BEFORE \b — otherwise "5 years" never
+  // matches because \b sees both "r" and "s" as word chars.
+  for (const m of l.matchAll(/(\d+)\s*days?\b/g))           max = Math.max(max, Number(m[1]));
+  for (const m of l.matchAll(/(\d+)\s*months?\b/g))         max = Math.max(max, Number(m[1]) * 30);
+  for (const m of l.matchAll(/(\d+)\s*(year|yr)s?\b/g))     max = Math.max(max, Number(m[1]) * 365);
+  for (const m of l.matchAll(/(\d+)y\b/g))                  max = Math.max(max, Number(m[1]) * 365);
 
   return max || 365;
 }
@@ -291,30 +293,49 @@ export function alternativesFor(
   topVehicleName: string
 ): ComparatorRow[] {
   const horizonRows = rd.comparator.filter((r) => matchHorizon(r.lockup, bucket));
-  // Sort by APY descending, drop the top match (it's the recommended one).
+  const recKey = canonicalKey(topVehicleName);
   return horizonRows
-    .filter((r) => !sameVehicleFamily(r.vehicle, topVehicleName))
+    .filter((r) => canonicalKey(r.vehicle) !== recKey)
     .sort((a, b) => b.apy - a.apy)
     .slice(0, 3);
 }
 
-function sameVehicleFamily(a: string, b: string): boolean {
-  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
-  return norm(a).startsWith(norm(b).slice(0, 8)) ||
-         norm(b).startsWith(norm(a).slice(0, 8));
+/**
+ * Canonical comparison key: lowercase + parens stripped + time tokens normalised
+ * ("10 yr" → "10y") + non-word chars dropped + tokens sorted. Lets us recognise
+ * that "10y Gilt" and "Gilt (10 yr)" are the same vehicle.
+ */
+function canonicalKey(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s*\([^)]*\)/g, " ")
+    .replace(/(\d+)\s*(year|yr)s?\b/g, "$1y")
+    .replace(/(\d+)\s*months?\b/g, "$1m")
+    .replace(/(\d+)\s*(week|wk)s?\b/g, "$1w")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .sort()
+    .join(" ");
 }
 
+/**
+ * Bucket-membership for the comparator/alternatives filter — derived from
+ * `lockupDays` so it never disagrees with `lockupToBucket`. Boundaries:
+ *   anytime: daily or ≤ 91 days
+ *   months:  92 – 365 days
+ *   years:   366 – 1825 days  (5y inclusive)
+ *   long:    > 1825 days
+ */
 function matchHorizon(lockup: string, bucket: Bucket): boolean {
-  const l = lockup.toLowerCase();
+  const isDaily =
+    /^daily/i.test(lockup) && !/(min|until|avoid)/i.test(lockup);
+  const days = lockupDays(lockup);
   switch (bucket) {
-    case "anytime":
-      return l.includes("daily") || /28|91|3 month|^[1-2] month/.test(l);
-    case "months":
-      return /182|364|6 month|12 month|3 month/.test(l) || /^1 yr/.test(l);
-    case "years":
-      return /^[1-5] /.test(l) && (l.includes("year") || l.includes("yr"));
-    case "long":
-      return /^([5-9]|1[0-9]) /.test(l) && (l.includes("year") || l.includes("yr"));
+    case "anytime": return isDaily || days <= 91;
+    case "months":  return !isDaily && days > 91 && days <= 365;
+    case "years":   return days > 365 && days <= 1825;
+    case "long":    return days >= 1825;
   }
 }
 

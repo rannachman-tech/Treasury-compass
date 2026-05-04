@@ -77,8 +77,8 @@ export function SafetyLaneMap({ rows, highlightVehicle }: Props) {
           className="grid gap-1 sm:gap-1.5"
           style={{
             gridTemplateColumns:
-              "minmax(96px, 116px) repeat(5, minmax(96px, 1fr))",
-            minWidth: "560px",
+              "minmax(120px, 140px) repeat(5, minmax(96px, 1fr))",
+            minWidth: "600px",
           }}
         >
           {/* Header row */}
