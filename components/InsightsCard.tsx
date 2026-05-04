@@ -13,7 +13,7 @@ interface Props {
 
 export function InsightsCard({ horizon, rungs, data, inflationAdjusted }: Props) {
   const inHorizon = rungs.filter((r) => r.horizon === horizon);
-  const winner =
+  const bestRung =
     inHorizon.length > 0
       ? inHorizon.reduce((a, b) => (a.yield >= b.yield ? a : b))
       : rungs[0];
@@ -26,7 +26,7 @@ export function InsightsCard({ horizon, rungs, data, inflationAdjusted }: Props)
   const slopeBps = Math.round(slope * 100);
 
   // Real yield headline
-  const realYield = winner.yield - data.cpiYoy;
+  const realYield = bestRung.yield - data.cpiYoy;
 
   // Recent move — using prevYield from the curve.
   const matchPoint =
@@ -36,7 +36,7 @@ export function InsightsCard({ horizon, rungs, data, inflationAdjusted }: Props)
 
   const insight = composeInsight({
     horizon,
-    winner,
+    bestRung,
     cpiYoy: data.cpiYoy,
     realYield,
     slopeBps,
@@ -68,7 +68,7 @@ export function InsightsCard({ horizon, rungs, data, inflationAdjusted }: Props)
 
       {/* Quick stats strip */}
       <dl className="mt-4 grid grid-cols-3 gap-2 rounded-md border border-border bg-surface-2 p-2">
-        <Stat label="Best APY" value={`${winner.yield.toFixed(2)}%`} sub={winner.name} />
+        <Stat label="Best APY" value={`${bestRung.yield.toFixed(2)}%`} sub={bestRung.winner.name} />
         <Stat
           label="Real yield"
           value={`${realYield >= 0 ? "" : "−"}${Math.abs(realYield).toFixed(2)}%`}
@@ -150,15 +150,15 @@ function closeToHorizon(maturity: number, horizon: Horizon): boolean {
 
 function composeInsight(args: {
   horizon: Horizon;
-  winner: Rung;
+  bestRung: Rung;
   cpiYoy: number;
   realYield: number;
   slopeBps: number;
   moveBps: number;
   inflationAdjusted: boolean;
 }): { headline: string; bullets: string[] } {
-  const { horizon, winner, cpiYoy, realYield, slopeBps, moveBps } = args;
-  const wYield = winner.yield.toFixed(2);
+  const { horizon, bestRung, cpiYoy, realYield, slopeBps, moveBps } = args;
+  const wYield = bestRung.yield.toFixed(2);
 
   switch (horizon) {
     case "<3mo":
@@ -189,7 +189,7 @@ function composeInsight(args: {
       return {
         headline: `5-year Treasuries pay ${wYield}% — you're being paid term premium, not just compensated for waiting.`,
         bullets: [
-          `Term premium: 5y is ~${(winner.yield - 3.55).toFixed(2)}% over the 3m bill. Modest but real.`,
+          `Term premium: 5y is ~${(bestRung.yield - 3.55).toFixed(2)}% over the 3m bill. Modest but real.`,
           `Ladder strategy: split 3y / 5y / 7y to smooth reinvestment risk if you'll roll into new bills as each matures.`,
           `Mark-to-market risk if rates rise: ~5y duration ≈ −5% per +100bp move. Hold to maturity to avoid the issue.`,
         ],
