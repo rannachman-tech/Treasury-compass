@@ -1,0 +1,32 @@
+name: Refresh yields data
+on:
+  schedule:
+    - cron: "0 21 * * 1-5"   # 21:00 UTC weekdays — after US Treasury close
+  workflow_dispatch: {}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --no-audit --no-fund
+      - name: Fetch yields
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: npm run fetch:yields
+      - name: Commit data
+        run: |
+          git config user.name "yields-bot"
+          git config user.email "yields-bot@users.noreply.github.com"
+          if git diff --quiet -- data/yields.json; then
+            echo "No changes."
+          else
+            git add data/yields.json
+            git commit -m "data: refresh yields snapshot $(date -u +%Y-%m-%d)"
+            git push
+          fi
