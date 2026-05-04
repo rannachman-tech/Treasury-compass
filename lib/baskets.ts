@@ -382,9 +382,9 @@ const UK_SHORT: Basket = {
       instrumentId: 10641,
       name: "SPDR Bloomberg UK Gilt UCITS ETF",
       weight: 25,
-      shortRationale: "UK gilts sleeve",
+      shortRationale: "UK gilts sleeve (GBP)",
       longRationale:
-        "Adds a small gilt allocation to capture front-end gilt yields. Marginal duration risk; full credit safety.",
+        "100% UK gilt holdings — same index as IGLT.L. Listed on Xetra (.DE) because it's the only UK gilt UCITS available on eToro; the share class is still GBP-denominated, so no FX risk for sterling investors.",
     },
     {
       ticker: "AGGU.L",
@@ -422,9 +422,9 @@ const UK_MEDIUM: Basket = {
       instrumentId: 10641,
       name: "SPDR Bloomberg UK Gilt UCITS ETF",
       weight: 30,
-      shortRationale: "UK gilts core",
+      shortRationale: "UK gilts core (GBP)",
       longRationale:
-        "Broad UK gilt exposure across maturities. Adds a small duration sleeve to capture term premium.",
+        "Broad UK gilt exposure across maturities. Listed on Xetra (.DE) as the only UK gilt UCITS on eToro, but the share class is GBP-denominated — same Bloomberg UK Gilt index as IGLT.L would track.",
     },
     {
       ticker: "AGGU.L",
@@ -452,9 +452,9 @@ const UK_LONG: Basket = {
       instrumentId: 10641,
       name: "SPDR Bloomberg UK Gilt UCITS ETF",
       weight: 50,
-      shortRationale: "UK gilts core",
+      shortRationale: "UK gilts core (GBP)",
       longRationale:
-        "Broad gilt exposure. Carries the term premium that UK rates currently offer.",
+        "Broad gilt exposure. Carries the term premium that UK rates currently offer. Xetra-listed (.DE) because it's the only UK gilt UCITS on eToro; share class is GBP-denominated so there's no FX risk vs. an LSE listing.",
     },
     {
       ticker: "ERNS.L",
@@ -492,9 +492,9 @@ const UK_ULTRA: Basket = {
       instrumentId: 10641,
       name: "SPDR Bloomberg UK Gilt UCITS ETF",
       weight: 55,
-      shortRationale: "UK gilts core",
+      shortRationale: "UK gilts core (GBP)",
       longRationale:
-        "All-maturity gilt index — closest available UCITS to long-only gilts on eToro.",
+        "All-maturity gilt index — closest available UCITS to long-only gilts on eToro. Listed on Xetra (.DE) as the sole eToro option, but the GBP share class means UK investors take no FX exposure vs. an LSE listing.",
     },
     {
       ticker: "AGGU.L",
