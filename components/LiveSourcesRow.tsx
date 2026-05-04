@@ -20,10 +20,13 @@ export function LiveSourcesRow({ generatedAt, sources }: Props) {
   });
 
   return (
-    <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-mono uppercase tracking-[0.16em] text-fg-subtle">
+    <div
+      className="flex flex-wrap items-center gap-2 text-[10.5px] font-mono uppercase tracking-[0.16em] text-fg-subtle"
+      title="Green dot = pulled live from this source. Amber = curated reference (rates verified periodically, not on every page load)."
+    >
       <span className="inline-flex items-center gap-1">
         <Activity size={11} className="text-positive" />
-        Live · {fmt} UTC
+        Refreshed · {fmt} UTC
       </span>
       <span aria-hidden className="text-border-strong">·</span>
       <ul className="flex flex-wrap items-center gap-1.5">
@@ -34,8 +37,14 @@ export function LiveSourcesRow({ generatedAt, sources }: Props) {
               : s.status === "cached"
               ? "bg-warn"
               : "bg-danger";
+          const dotTitle =
+            s.status === "live"
+              ? `${s.name} — pulled live`
+              : s.status === "cached"
+              ? `${s.name} — curated reference`
+              : `${s.name} — stale`;
           const inner = (
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1" title={dotTitle}>
               <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${dot}`} />
               {s.name}
             </span>

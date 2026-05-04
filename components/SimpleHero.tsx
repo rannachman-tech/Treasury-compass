@@ -74,10 +74,10 @@ export function SimpleHero({
   }, [horizon, onHorizonSync]);
 
   return (
-    <div className="space-y-8">
-      {/* ─── HERO — split: inputs ⬌ live answer ─── */}
+    <div className="space-y-7">
+      {/* ─── HERO — split: inputs+alts ⬌ live answer ─── */}
       <section className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-5 lg:gap-7 items-stretch">
-        {/* LEFT — inputs */}
+        {/* LEFT — inputs + alternatives */}
         <div className="flex flex-col gap-5">
           <div>
             <p className="eyebrow">When will you need this money?</p>
@@ -162,6 +162,61 @@ export function SimpleHero({
               </div>
             </div>
           </div>
+
+          {/* Alternatives — fills the left-column gap */}
+          {alternatives.length > 0 && (
+            <div className="fade-up" style={{ animationDelay: "120ms" }}>
+              <p className="eyebrow">Other picks at the same horizon</p>
+              <div className="mt-2.5 flex flex-col gap-1.5">
+                {alternatives.map((alt) => {
+                  const altValue = projectValue(amount, alt.apy, years);
+                  const delta = altValue - futureValue;
+                  const lane =
+                    alt.coverage === "Treasury" || alt.coverage === "Sovereign"
+                      ? "Government"
+                      : alt.coverage === "FDIC" || alt.coverage === "FSCS" || alt.coverage === "Deposit-EU"
+                      ? "Bank"
+                      : alt.coverage === "MMF"
+                      ? "Money-market"
+                      : "Market-priced";
+                  return (
+                    <div
+                      key={alt.vehicle}
+                      className="card card-lift flex items-center gap-3 px-3.5 py-2.5"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="truncate text-[13px] font-semibold text-fg" title={alt.vehicle}>
+                            {alt.vehicle}
+                          </span>
+                          <span className="tabular text-[11px] text-fg-subtle shrink-0">
+                            {alt.apy.toFixed(2)}%
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-[10.5px] text-fg-subtle truncate">
+                          {lane} · {alt.lockup}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="tabular text-[14.5px] font-semibold text-fg leading-tight">
+                          {sym}{Math.round(altValue).toLocaleString()}
+                        </div>
+                        <div
+                          className={[
+                            "tabular text-[10px] font-medium leading-tight",
+                            delta >= 0 ? "text-positive" : "text-fg-subtle",
+                          ].join(" ")}
+                        >
+                          {delta >= 0 ? "+" : "−"}{sym}
+                          {Math.abs(Math.round(delta)).toLocaleString()} vs best
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* RIGHT — live answer */}
@@ -185,54 +240,7 @@ export function SimpleHero({
         />
       </section>
 
-      {/* ─── ALTERNATIVES — horizontal cards ─── */}
-      {alternatives.length > 0 && (
-        <section className="fade-up" style={{ animationDelay: "120ms" }}>
-          <p className="eyebrow">Other picks at the same horizon</p>
-          <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-            {alternatives.map((alt) => {
-              const altValue = projectValue(amount, alt.apy, years);
-              const delta = altValue - futureValue;
-              return (
-                <div key={alt.vehicle} className="card card-lift p-3.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-semibold text-fg truncate" title={alt.vehicle}>
-                      {alt.vehicle}
-                    </span>
-                    <span className="tabular text-[11px] text-fg-subtle">{alt.apy.toFixed(2)}%</span>
-                  </div>
-                  <p className="mt-0.5 text-[11px] text-fg-subtle">
-                    {alt.coverage === "Treasury" || alt.coverage === "Sovereign"
-                      ? "Government-backed"
-                      : alt.coverage === "FDIC" || alt.coverage === "FSCS" || alt.coverage === "Deposit-EU"
-                      ? "Bank-backed"
-                      : alt.coverage === "MMF"
-                      ? "Money-market"
-                      : "Market-priced"}
-                    {" · "}
-                    {alt.lockup}
-                  </p>
-                  <div className="mt-3 flex items-baseline justify-between">
-                    <span className="tabular text-[18px] font-semibold text-fg">
-                      {sym}{Math.round(altValue).toLocaleString()}
-                    </span>
-                    <span
-                      className={[
-                        "tabular text-[10.5px] font-medium",
-                        delta >= 0 ? "text-positive" : "text-fg-subtle",
-                      ].join(" ")}
-                    >
-                      {delta >= 0 ? "+" : "−"}{sym}{Math.abs(Math.round(delta)).toLocaleString()} vs best
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* ─── SAFETY LANE MAP ─── */}
+      {/* ─── SAFETY LANE MAP — full width ─── */}
       <section className="fade-up" style={{ animationDelay: "200ms" }}>
         <SafetyLaneMap
           rows={regionData.comparator}
