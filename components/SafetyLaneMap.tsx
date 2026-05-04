@@ -1,7 +1,16 @@
 "use client";
 
 import type { ComparatorRow } from "@/lib/types";
-import { lockupDays, lockupToX, vehicleLane, SAFETY_LANE_LABEL, type SafetyLane } from "@/lib/simple";
+import {
+  abbreviateVehicle,
+  lockupToBucket,
+  vehicleLane,
+  LOCKUP_BUCKETS,
+  LOCKUP_BUCKET_LABEL,
+  SAFETY_LANE_LABEL,
+  type LockupBucket,
+  type SafetyLane,
+} from "@/lib/simple";
 
 interface Props {
   rows: ComparatorRow[];
@@ -10,118 +19,127 @@ interface Props {
 
 const LANES: SafetyLane[] = ["government", "bank", "mmf", "market"];
 
-const LANE_COLOR: Record<SafetyLane, string> = {
-  government: "rgb(var(--positive))",
-  bank:       "rgb(var(--accent))",
-  mmf:        "rgb(var(--warn))",
-  market:     "rgb(var(--danger))",
+const LANE_TINT: Record<SafetyLane, { dot: string; pill: string; pillActive: string }> = {
+  government: {
+    dot: "bg-positive",
+    pill: "border-positive/30 bg-positive/8 text-positive",
+    pillActive: "border-accent bg-accent/15 text-accent ring-1 ring-accent/40",
+  },
+  bank: {
+    dot: "bg-positive/70",
+    pill: "border-positive/25 bg-positive/6 text-positive",
+    pillActive: "border-accent bg-accent/15 text-accent ring-1 ring-accent/40",
+  },
+  mmf: {
+    dot: "bg-warn",
+    pill: "border-warn/30 bg-warn/8 text-warn",
+    pillActive: "border-accent bg-accent/15 text-accent ring-1 ring-accent/40",
+  },
+  market: {
+    dot: "bg-danger",
+    pill: "border-danger/30 bg-danger/8 text-danger",
+    pillActive: "border-accent bg-accent/15 text-accent ring-1 ring-accent/40",
+  },
 };
 
-const VBOX_W = 620;
-const VBOX_H = 200;
-const PAD_LEFT = 110;
-const PAD_RIGHT = 16;
-const PAD_TOP = 18;
-const PAD_BOTTOM = 28;
-const LANE_H = (VBOX_H - PAD_TOP - PAD_BOTTOM) / LANES.length;
+interface PositionedChip extends ComparatorRow {
+  abbrev: string;
+  lane: SafetyLane;
+  bucket: LockupBucket;
+  active: boolean;
+}
 
-/** A 2D map: safety on Y axis (4 lanes), lockup on X axis. */
 export function SafetyLaneMap({ rows, highlightVehicle }: Props) {
-  const positions = rows.map((r) => {
-    const lane = vehicleLane(r.coverage);
-    const laneIdx = LANES.indexOf(lane);
-    const xRel = lockupToX(lockupDays(r.lockup));
-    const x = PAD_LEFT + xRel * (VBOX_W - PAD_LEFT - PAD_RIGHT);
-    const y = PAD_TOP + laneIdx * LANE_H + LANE_H / 2;
-    return { ...r, lane, x, y };
-  });
+  const positioned: PositionedChip[] = rows.map((r) => ({
+    ...r,
+    abbrev: abbreviateVehicle(r.vehicle) || r.vehicle,
+    lane: vehicleLane(r.coverage),
+    bucket: lockupToBucket(r.lockup),
+    active: r.vehicle === highlightVehicle,
+  }));
+
+  // Index for O(1) cell lookup
+  function chipsIn(lane: SafetyLane, bucket: LockupBucket): PositionedChip[] {
+    return positioned
+      .filter((c) => c.lane === lane && c.bucket === bucket)
+      .sort((a, b) => (b.active ? 1 : 0) - (a.active ? 1 : 0) || b.apy - a.apy);
+  }
 
   return (
-    <div className="rounded-md border border-border bg-surface-2 p-3">
+    <div className="rounded-md border border-border bg-surface-2 p-3 sm:p-4">
       <div className="flex items-center justify-between text-[10.5px] font-mono uppercase tracking-[0.18em] text-fg-subtle">
         <span>Where this sits</span>
-        <span className="text-fg-subtle/80">
-          ← Liquid · Locked-in →
-        </span>
+        <span className="text-fg-subtle/80">← liquid · locked-in →</span>
       </div>
-      <svg
-        viewBox={`0 0 ${VBOX_W} ${VBOX_H}`}
-        className="mt-2 block w-full"
-        preserveAspectRatio="xMidYMid meet"
-        role="img"
-        aria-label="Safety vs lockup map"
-      >
-        {LANES.map((lane, i) => {
-          const yMid = PAD_TOP + i * LANE_H + LANE_H / 2;
-          const yLine = PAD_TOP + i * LANE_H + LANE_H;
-          return (
-            <g key={lane}>
-              <text
-                x="6"
-                y={yMid + 4}
-                fontSize="11"
-                fill="rgb(var(--fg-muted))"
-                fontFamily="ui-sans-serif"
-              >
-                {SAFETY_LANE_LABEL[lane]}
-              </text>
-              <line
-                x1={PAD_LEFT - 8}
-                y1={yLine}
-                x2={VBOX_W - PAD_RIGHT}
-                y2={yLine}
-                stroke="rgb(var(--border))"
-                strokeWidth="0.5"
-                strokeDasharray="3 3"
-              />
-            </g>
-          );
-        })}
-        <line
-          x1={PAD_LEFT - 8}
-          y1={PAD_TOP}
-          x2={PAD_LEFT - 8}
-          y2={VBOX_H - PAD_BOTTOM + LANE_H}
-          stroke="rgb(var(--border))"
-          strokeWidth="0.5"
-        />
 
-        <text x={PAD_LEFT} y={VBOX_H - 8} fontSize="10" fill="rgb(var(--fg-subtle))">
-          instant
-        </text>
-        <text x={(PAD_LEFT + VBOX_W - PAD_RIGHT) / 2 - 16} y={VBOX_H - 8} fontSize="10" fill="rgb(var(--fg-subtle))">
-          months · 1y
-        </text>
-        <text x={VBOX_W - PAD_RIGHT - 26} y={VBOX_H - 8} fontSize="10" fill="rgb(var(--fg-subtle))">
-          5y+
-        </text>
+      <div className="scroll-x mt-3">
+        <div
+          className="grid gap-1 sm:gap-1.5"
+          style={{
+            gridTemplateColumns:
+              "minmax(96px, 116px) repeat(5, minmax(96px, 1fr))",
+            minWidth: "560px",
+          }}
+        >
+          {/* Header row */}
+          <div />
+          {LOCKUP_BUCKETS.map((b) => (
+            <div
+              key={`h-${b}`}
+              className="px-1.5 pb-1 text-center text-[9.5px] font-mono uppercase tracking-wider text-fg-subtle border-b border-dashed border-border"
+            >
+              {LOCKUP_BUCKET_LABEL[b]}
+            </div>
+          ))}
 
-        {positions.map((p) => {
-          const active = p.vehicle === highlightVehicle;
-          return (
-            <g key={p.vehicle}>
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r={active ? 8 : 5.5}
-                fill={LANE_COLOR[p.lane]}
-                stroke={active ? "rgb(var(--fg))" : "transparent"}
-                strokeWidth={active ? 1.5 : 0}
-              />
-              <text
-                x={p.x + (active ? 12 : 9)}
-                y={p.y + 3.5}
-                fontSize={active ? 11 : 10}
-                fill="rgb(var(--fg))"
-                fontWeight={active ? 600 : 400}
-              >
-                {p.vehicle}
-                {active ? " ★" : ""}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+          {/* Lane rows */}
+          {LANES.map((lane) => (
+            <div key={lane} className="contents">
+              <div className="flex items-center gap-1.5 pr-2 py-1.5 text-[12px] text-fg-muted">
+                <span aria-hidden className={`h-2 w-2 rounded-full ${LANE_TINT[lane].dot}`} />
+                <span className="truncate" title={SAFETY_LANE_LABEL[lane]}>
+                  {SAFETY_LANE_LABEL[lane]}
+                </span>
+              </div>
+              {LOCKUP_BUCKETS.map((bucket) => {
+                const chips = chipsIn(lane, bucket);
+                return (
+                  <div
+                    key={`${lane}-${bucket}`}
+                    className="flex flex-wrap content-start gap-1 rounded-sm border border-dashed border-border/60 bg-surface/40 p-1 min-h-[40px]"
+                  >
+                    {chips.length === 0 ? (
+                      <span className="m-auto text-[10px] text-fg-subtle/50">—</span>
+                    ) : (
+                      chips.map((c) => (
+                        <span
+                          key={c.vehicle}
+                          title={`${c.vehicle} · ${c.lockup} · ${c.apy.toFixed(2)}%`}
+                          className={[
+                            "inline-flex items-center gap-1 whitespace-nowrap rounded border px-1.5 py-px text-[10.5px] tabular",
+                            c.active
+                              ? `font-semibold ${LANE_TINT[c.lane].pillActive}`
+                              : LANE_TINT[c.lane].pill,
+                          ].join(" ")}
+                        >
+                          {c.active && <span aria-hidden>★</span>}
+                          <span className="truncate max-w-[140px]">{c.abbrev}</span>
+                          <span className="opacity-60 hidden md:inline">{c.apy.toFixed(1)}%</span>
+                        </span>
+                      ))
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="mt-2 text-[10.5px] text-fg-subtle leading-snug">
+        Rows = how safe the money is. Columns = how long until you can get it back.
+        Star marks the recommendation.
+      </p>
     </div>
   );
 }

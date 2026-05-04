@@ -225,7 +225,7 @@
         { "maturity": 30,    "yield": 4.75, "prevYield": 4.82 }
       ],
       "rungs": [
-        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 3.75, "horizon": "<3mo",
+        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 3.70, "horizon": "<3mo",
           "winner": { "name": "GBP MMF (SONIA-linked)", "issuer": "Royal London / BlackRock", "yield": 3.70, "coverage": "MMF", "lockup": "Daily liquid", "tax": "Income tax", "vehicle": "MMF", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
         { "id": "3mo", "label": "3 months", "position": 1, "yield": 3.65, "horizon": "<3mo",
           "winner": { "name": "GBP Ultrashort Bond ETF", "issuer": "iShares", "yield": 3.65, "coverage": "Sovereign", "lockup": "Daily (ETF)", "tax": "Income tax", "vehicle": "ETF", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
@@ -252,7 +252,7 @@
         { "vehicle": "NS&I Income Bonds",    "apy": 3.40, "lockup": "Daily",     "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£500",   "issuer": "NS&I",                  "issuerLink": "https://www.nsandi.com", "secondaryTaxFree": false },
         { "vehicle": "NS&I Premium Bonds",   "apy": 3.10, "lockup": "Daily",     "coverage": "Sovereign",  "taxes": "Tax-free prizes",   "minimum": "£25",    "issuer": "NS&I",                  "issuerLink": "https://www.nsandi.com/premium-bonds", "secondaryTaxFree": true },
         { "vehicle": "Cash ISA",             "apy": 4.50, "lockup": "Daily",     "coverage": "FSCS",       "taxes": "ISA tax-free",      "minimum": "£1",     "issuer": "Top UK banks",          "secondaryTaxFree": true },
-        { "vehicle": "Easy-access savings",  "apy": 4.20, "lockup": "Daily",     "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1",     "issuer": "Top UK banks",          "issuerLink": "https://www.fscs.org.uk", "secondaryTaxFree": false },
+        { "vehicle": "Easy-access",          "apy": 4.20, "lockup": "Daily",     "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1",     "issuer": "Top UK banks",          "issuerLink": "https://www.fscs.org.uk", "secondaryTaxFree": false },
         { "vehicle": "Fixed-rate bond 1y",   "apy": 4.40, "lockup": "12 months", "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1,000", "issuer": "Various banks",         "secondaryTaxFree": false },
         { "vehicle": "Fixed-rate bond 3y",   "apy": 4.50, "lockup": "3 years",   "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1,000", "issuer": "Various banks",         "secondaryTaxFree": false },
         { "vehicle": "GBP MMF (UCITS)",      "apy": 3.70, "lockup": "Daily",     "coverage": "MMF",        "taxes": "Income tax",        "minimum": "£1",     "issuer": "BlackRock / Royal London","secondaryTaxFree": false }
@@ -340,7 +340,7 @@
         { "vehicle": "EUR Ultrashort (IS3M)",      "apy": 2.35, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
         { "vehicle": "GBP Ultrashort (ERNS)",      "apy": 3.65, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
         { "vehicle": "Global Agg (AGGU)",          "apy": 3.40, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
-        { "vehicle": "Global Agg EUR-hedged (EUNA)","apy": 2.85, "lockup": "Daily","coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "Global Agg (EUNA)",          "apy": 2.85, "lockup": "Daily","coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
         { "vehicle": "USD Treasury 20+y (DTLA)",   "apy": 3.85, "lockup": "Daily", "coverage": "Treasury",  "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
         { "vehicle": "Eurozone Govies (XY4P)",     "apy": 2.65, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "Xtrackers",    "issuerLink": "https://etf.dws.com", "secondaryTaxFree": true },
         { "vehicle": "EUR Linker (IBCI)",          "apy": 1.05, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },

@@ -48,10 +48,11 @@ export function Header({ mode, onModeChange }: Props) {
               <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="hidden sm:inline-flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent/10 px-2.5 py-1.5 text-[12.5px] font-medium text-accent hover:bg-accent/20"
+                aria-label="Connect eToro"
+                className="inline-flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent/10 px-2 sm:px-2.5 py-1.5 text-[12.5px] font-medium text-accent hover:bg-accent/20"
               >
                 <Plug size={13} />
-                Connect eToro
+                <span className="hidden sm:inline">Connect eToro</span>
               </button>
             ) : (
               <div className="relative">

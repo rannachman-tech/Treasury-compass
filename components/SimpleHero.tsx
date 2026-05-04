@@ -394,7 +394,7 @@ function GrowthCurve({
 }
 
 function basketSummary(b: Basket): string {
-  return b.holdings.map((h) => `${h.ticker} ${h.weight}%`).join(" + ");
+  return b.holdings.map((h) => h.ticker).join(" · ");
 }
 
 function humanYears(years: number): string {

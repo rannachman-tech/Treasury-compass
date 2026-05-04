@@ -204,17 +204,22 @@ export function vehicleLane(coverage: ComparatorRow["coverage"]): SafetyLane {
   }
 }
 
-/** Days until earliest sensible exit. Used to position chips on the X axis. */
+/**
+ * Days until earliest *full-benefit* exit. Scans for ALL time references and
+ * takes the max — handles strings like "12 months min, 5y to avoid penalty"
+ * where the headline lock is shorter than the effective hold.
+ */
 export function lockupDays(lockup: string): number {
   const l = lockup.toLowerCase();
-  if (/daily|same.day/.test(l)) return 1;
-  const dMatch = l.match(/(\d+)\s*day/);
-  if (dMatch) return Number(dMatch[1]);
-  const mMatch = l.match(/(\d+)\s*month/);
-  if (mMatch) return Number(mMatch[1]) * 30;
-  const yMatch = l.match(/(\d+)\s*(year|yr)/);
-  if (yMatch) return Number(yMatch[1]) * 365;
-  return 365;
+  if (/^daily/.test(l) && !/(min|until|avoid)/.test(l)) return 1;
+
+  let max = 0;
+  for (const m of l.matchAll(/(\d+)\s*day/g)) max = Math.max(max, Number(m[1]));
+  for (const m of l.matchAll(/(\d+)\s*month/g)) max = Math.max(max, Number(m[1]) * 30);
+  for (const m of l.matchAll(/(\d+)\s*(year|yr)\b/g)) max = Math.max(max, Number(m[1]) * 365);
+  for (const m of l.matchAll(/(\d+)y\b/g)) max = Math.max(max, Number(m[1]) * 365);
+
+  return max || 365;
 }
 
 /** Map lockup days to an X position 0–1 on a log-ish scale. */
@@ -224,6 +229,56 @@ export function lockupToX(days: number): number {
   if (days <= 365)   return 0.20 + ((days - 30) / 335) * 0.30;
   if (days <= 1825)  return 0.50 + ((days - 365) / 1460)* 0.30;
   return 0.80 + Math.min(0.18, ((days - 1825) / 3650) * 0.18);
+}
+
+/** Discrete buckets used by the Safety map grid. */
+export type LockupBucket = "instant" | "weeks" | "year" | "mid" | "long";
+
+export const LOCKUP_BUCKETS: LockupBucket[] = ["instant", "weeks", "year", "mid", "long"];
+
+export const LOCKUP_BUCKET_LABEL: Record<LockupBucket, string> = {
+  instant: "Instant",
+  weeks: "Weeks",
+  year: "≤ 1 yr",
+  mid: "1 – 5 yr",
+  long: "5 yr +",
+};
+
+export function lockupToBucket(lockup: string): LockupBucket {
+  const l = lockup.toLowerCase();
+  if (/daily|same.day/.test(l)) return "instant";
+  const days = lockupDays(lockup);
+  if (days <= 91)   return "weeks";
+  if (days <= 365)  return "year";
+  if (days <= 1825) return "mid";
+  return "long";
+}
+
+/**
+ * Compact chip labels for the Safety map grid.
+ *
+ * Behaviour: parens that contain a time signal (e.g. "(4 wk)") become a tiny
+ * trailing tag ("T-bill 4w"). Parens with non-time content (e.g. "(AGGU)",
+ * "(top)") are preserved — they differentiate otherwise-identical base names.
+ */
+export function abbreviateVehicle(name: string): string {
+  let timeTag = "";
+  const kept: string[] = [];
+  for (const m of name.matchAll(/\(([^)]*)\)/g)) {
+    const inner = m[1].trim();
+    const wk = inner.match(/(\d+)\s*(wk|week)s?/i);
+    const mo = inner.match(/(\d+)\s*(mo|month)s?/i);
+    const yr = inner.match(/(\d+)\s*(yr|year)s?\b/i);
+    if (wk)       timeTag = `${wk[1]}w`;
+    else if (mo)  timeTag = `${mo[1]}m`;
+    else if (yr)  timeTag = `${yr[1]}y`;
+    else if (inner.length > 0) kept.push(inner.split(/\s+/)[0]);
+  }
+
+  let stripped = name.replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
+  if (kept.length > 0) stripped += " (" + kept.join(", ") + ")";
+
+  return timeTag ? `${stripped} ${timeTag}` : stripped;
 }
 
 // ─────────────────────────────────────────────────────────────────
