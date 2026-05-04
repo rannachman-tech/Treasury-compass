@@ -221,7 +221,6 @@ export function SimpleHero({
 
         {/* RIGHT — live answer */}
         <RecommendationCard
-          key={`${region}-${bucket}-${amount}`}
           regionData={regionData}
           bestRungName={bestRung.winner.name}
           coverage={bestRung.winner.coverage}
@@ -435,8 +434,9 @@ function GrowthCurve({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, yieldPct, years]);
 
-  // Re-key so the line redraws when inputs change
-  const animKey = `${amount}-${yieldPct}-${years}`;
+  // Re-key only on bucket-shape changes (yield + years). Amount changes
+  // shouldn't re-run the draw-line animation — they just rescale the curve.
+  const animKey = `${yieldPct}-${years}`;
 
   return (
     <svg
