@@ -172,11 +172,13 @@ export function SimpleHero({
             </div>
           </div>
 
-          {/* Alternatives — fills the left-column gap */}
+          {/* Alternatives — fills the left-column gap. `flex-1` on the section
+               + on each card makes them absorb whatever extra height the right
+               column has, so bottom edges align. */}
           {alternatives.length > 0 && (
-            <div className="fade-up" style={{ animationDelay: "120ms" }}>
+            <div className="fade-up flex flex-col flex-1" style={{ animationDelay: "120ms" }}>
               <p className="eyebrow">Other picks at the same horizon</p>
-              <div className="mt-2.5 flex flex-col gap-1.5">
+              <div className="mt-2.5 flex flex-col gap-1.5 flex-1">
                 {alternatives.map((alt) => {
                   const altValue = projectValue(amount, alt.apy, years);
                   const delta = altValue - futureValue;
@@ -196,7 +198,7 @@ export function SimpleHero({
                   return (
                     <div
                       key={alt.vehicle}
-                      className="card card-lift flex items-center gap-3 px-3.5 py-2.5"
+                      className="card card-lift flex flex-1 items-center gap-3 px-3.5 py-2.5"
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-1.5">
@@ -395,8 +397,10 @@ function RecommendationCard({
       </p>
 
       {/* Always-visible rationale — defensive or positive, plus a symmetric
-          "when the alt might be better" line so the page reads as even-handed. */}
-      <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted space-y-1">
+          "when the alt might be better" line so the page reads as even-handed.
+          Hierarchy: primary defence is full weight; symmetric line is smaller,
+          quieter, and separated by a thin divider so it reads as supporting. */}
+      <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted">
         <p>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
             {why.eyebrow}:
@@ -404,8 +408,8 @@ function RecommendationCard({
           {why.body}
         </p>
         {why.altBody && (
-          <p className="text-fg-subtle">
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-muted mr-1.5">
+          <p className="mt-1.5 pt-1.5 border-t border-accent/15 text-[11px] text-fg-subtle leading-snug">
+            <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-fg-subtle mr-1.5">
               When {why.altName ? why.altName : "the alt"} wins:
             </span>
             {why.altBody}
@@ -424,9 +428,9 @@ function RecommendationCard({
         </button>
         <span
           className="text-[11px] text-fg-subtle leading-snug"
-          title={`Buying this basket splits your money across ${basket.holdings.length} ETFs that together mimic the recommended exposure with daily liquidity.`}
+          title={`Buying this basket splits your money across ${basket.holdings.length} ETFs that together mimic the recommended exposure with daily liquidity. ETFs are the easiest way to get this exposure without buying bonds directly.`}
         >
-          via {basket.holdings.length} ETFs that wrap this exposure ·{" "}
+          via {basket.holdings.length} simple ETFs — easiest way to buy ·{" "}
           <span className="font-medium text-fg-muted">{basket.holdings.map((h) => h.ticker).join(" · ")}</span>
         </span>
       </div>
