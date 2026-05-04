@@ -472,21 +472,17 @@ export function whyMatch(
   if (recIsTreasury && altIsCd) {
     return {
       eyebrow: "Why this still wins",
-      body: stateTaxFree
-        ? "CD pays more upfront, but taxes plus lock-in usually swing it: state-tax-free Treasuries win after-tax."
-        : "CD pays more upfront, but the early-withdrawal penalty plus tax usually swing it after-tax.",
+      body: "CD pays more upfront, but taxes and lock-in usually make Treasuries better overall.",
       altName: topAlt.vehicle,
-      altBody: "Pick the CD if you don't pay state tax, want a fixed return, and won't need early access.",
+      altBody: "CD may be better if you don't pay state tax, want a guaranteed return, and won't need the money early.",
     };
   }
   if (recIsTreasury && altIsHysa) {
     return {
       eyebrow: "Why this still wins",
-      body: stateTaxFree
-        ? `${topAlt.vehicle} pays more, but it's fully taxable and the rate can drop any day.`
-        : `${topAlt.vehicle} pays more, but the rate is variable and can drop without notice.`,
+      body: `${topAlt.vehicle} pays more headline, but it's fully taxable and the rate can drop any day.`,
       altName: topAlt.vehicle,
-      altBody: "Pick the HYSA if you want pure daily liquidity and don't mind the rate moving.",
+      altBody: `${topAlt.vehicle} may be better if you want pure daily liquidity and don't mind the rate moving.`,
     };
   }
   if (recIsTreasury && altIsPrimeMmf) {
@@ -494,14 +490,14 @@ export function whyMatch(
       eyebrow: "Why this still wins",
       body: "Prime MMF pays more by holding commercial paper — slight credit risk vs. pure Treasury.",
       altName: topAlt.vehicle,
-      altBody: "Pick Prime MMF if you're comfortable with diversified short-term corporate paper.",
+      altBody: "Prime MMF may be better if you're comfortable with diversified short-term corporate paper.",
     };
   }
   return {
     eyebrow: "Why this still wins",
     body: "Higher headline rate, but tax, lockup, or credit usually swing the after-tax outcome.",
     altName: topAlt.vehicle,
-    altBody: `Pick ${topAlt.vehicle} if its specific trade-offs fit your situation better.`,
+    altBody: `${topAlt.vehicle} may be better if its specific trade-offs fit your situation.`,
   };
 }
 
