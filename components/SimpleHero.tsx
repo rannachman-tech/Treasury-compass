@@ -22,7 +22,7 @@ import {
   rungYears,
   SOURCE_TIER_HINT,
   SOURCE_TIER_LABEL,
-  whyOverAlternative,
+  whyMatch,
   type Bucket,
 } from "@/lib/simple";
 
@@ -74,9 +74,9 @@ export function SimpleHero({
   const sym = currencySymbol(regionData.currency);
   const temp = rateTemperature(regionData.history, bucket, bestRung.yield);
   const alternatives = alternativesFor(bucket, regionData, bestRung.winner.name);
-  // The runner-up by raw value. If it beats the rec on $, we owe an explanation.
-  const topAltByValue = [...alternatives].sort((a, b) => b.apy - a.apy)[0];
-  const whyLine = whyOverAlternative(bestRung, topAltByValue);
+  // Top runner-up by yield, used to frame the always-visible rationale box.
+  const topAltByYield = [...alternatives].sort((a, b) => b.apy - a.apy)[0];
+  const why = whyMatch(bestRung, topAltByYield);
 
   // Sync horizon back to the parent so Pro mode stays consistent.
   useEffect(() => {
@@ -252,7 +252,7 @@ export function SimpleHero({
             lockupLine={plainEnglishLockup(bestRung.winner, bucket)}
             taxLine={plainEnglishTax(bestRung.winner)}
             catchLine={plainEnglishCatch(bestRung.winner)}
-            whyLine={whyLine}
+            why={why}
             basket={basketFor(horizon, region)}
             onTrade={onTrade}
           />
@@ -294,7 +294,7 @@ interface RecommendationCardProps {
   lockupLine: string;
   taxLine: string;
   catchLine: string;
-  whyLine: string | null;
+  why: { eyebrow: string; body: string };
   basket: Basket;
   onTrade: () => void;
 }
@@ -313,7 +313,7 @@ function RecommendationCard({
   lockupLine,
   taxLine,
   catchLine,
-  whyLine,
+  why,
   basket,
   onTrade,
 }: RecommendationCardProps) {
@@ -384,16 +384,15 @@ function RecommendationCard({
         Catch: <span className="text-fg">{catchLine.toLowerCase()}</span>.
       </p>
 
-      {/* "Why beats higher-yielding alt" — surfaces only when an alternative
-          shows a higher headline rate, defending the recommendation explicitly. */}
-      {whyLine && (
-        <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
-            Why this still wins:
-          </span>
-          {whyLine}
-        </div>
-      )}
+      {/* Always-visible rationale — keeps the card height stable across buckets.
+          Eyebrow text adapts: defensive when an alt has a higher headline rate,
+          positive when the rec is also the highest-yielding option. */}
+      <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
+          {why.eyebrow}:
+        </span>
+        {why.body}
+      </div>
 
       {/* CTA */}
       <div className="flex flex-wrap items-center gap-3 pt-1">

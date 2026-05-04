@@ -437,40 +437,60 @@ const EXPENSE_RATIOS_BPS: Array<[RegExp, number]> = [
 ];
 
 /**
- * When an alternative shows a higher dollar gain than the recommendation,
- * explain WHY the rec still wins. This addresses the trust-break of
- * "you said Best match, but the CD pays more — why?"
+ * Always-visible rationale for the recommendation card. Two modes:
+ * - When an alternative beats the rec on headline rate, defend with the trade-off.
+ * - When the rec is also the highest-yielding option, frame the match positively.
  *
- * Returns null when the rec is also the highest-yielding option (no need to defend).
+ * Keeping this slot always populated stabilises the card's vertical height
+ * across bucket changes (the box no longer appears/disappears).
  */
-export function whyOverAlternative(
+export function whyMatch(
   rec: Rung,
   topAlt: ComparatorRow | undefined
-): string | null {
-  if (!topAlt) return null;
-  if (topAlt.apy <= rec.yield) return null;
-
-  const altIsCd = /\bCD\b|fixed.?rate bond|term deposit/i.test(topAlt.vehicle);
-  const altIsHysa = /HYSA|easy.?access|savings|cash ISA|premium bonds?/i.test(topAlt.vehicle);
-  const altIsPrimeMmf = /\bPrime\b/i.test(topAlt.vehicle);
+): { eyebrow: string; body: string } {
   const recIsTreasury =
     rec.winner.coverage === "Treasury" || rec.winner.coverage === "Sovereign";
   const stateTaxFree = /state.?tax.?free/i.test(rec.winner.tax);
 
+  if (!topAlt || topAlt.apy <= rec.yield) {
+    return {
+      eyebrow: "Why this match",
+      body: recIsTreasury
+        ? `Highest headline yield at this horizon, fully government-backed${stateTaxFree ? " and state-tax-free" : ""}. No compromise on safety to get the rate.`
+        : `Highest headline yield available at this horizon with the cleanest credit profile in the bucket.`,
+    };
+  }
+
+  const altIsCd = /\bCD\b|fixed.?rate bond|term deposit/i.test(topAlt.vehicle);
+  const altIsHysa = /HYSA|easy.?access|savings|cash ISA|premium bonds?/i.test(topAlt.vehicle);
+  const altIsPrimeMmf = /\bPrime\b/i.test(topAlt.vehicle);
+
   if (recIsTreasury && altIsCd) {
-    return `Higher headline rate, but ${topAlt.vehicle} is taxed federal + state and locks you in with an early-withdrawal penalty.${
-      stateTaxFree ? " State-tax-free Treasury usually wins after-tax." : ""
-    }`;
+    return {
+      eyebrow: "Why this still wins",
+      body: `Higher headline rate, but ${topAlt.vehicle} is fully taxable and locks you in with an early-withdrawal penalty.${
+        stateTaxFree ? " State-tax-free government bonds usually win after-tax." : ""
+      }`,
+    };
   }
   if (recIsTreasury && altIsHysa) {
-    return `Higher headline rate, but ${topAlt.vehicle} is fully taxable and the rate can change anytime.${
-      stateTaxFree ? " State-tax-free Treasury usually wins after-tax." : ""
-    }`;
+    return {
+      eyebrow: "Why this still wins",
+      body: `Higher headline rate, but ${topAlt.vehicle} is fully taxable and the rate can change anytime.${
+        stateTaxFree ? " State-tax-free government bonds usually win after-tax." : ""
+      }`,
+    };
   }
   if (recIsTreasury && altIsPrimeMmf) {
-    return `${topAlt.vehicle} pays more by holding commercial paper — slight credit risk vs. pure Treasury.`;
+    return {
+      eyebrow: "Why this still wins",
+      body: `${topAlt.vehicle} pays more by holding commercial paper — slight credit risk vs. pure Treasury.`,
+    };
   }
-  return `Higher headline rate, but trade-offs in tax, lockup, or credit profile usually swing the after-tax outcome.`;
+  return {
+    eyebrow: "Why this still wins",
+    body: `Higher headline rate, but trade-offs in tax, lockup, or credit profile usually swing the after-tax outcome.`,
+  };
 }
 
 /** Look up expense ratio in bps. 0 if no wrapper (direct Treasury, deposit). */
