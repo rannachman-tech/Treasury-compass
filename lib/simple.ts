@@ -105,11 +105,11 @@ export function plainEnglishCatch(w: Winner): string {
 
 /** Tax line (one phrase). */
 export function plainEnglishTax(w: Winner): string {
-  if (w.tax.toLowerCase().includes("state-tax-free")) return "No state tax";
-  if (w.tax.toLowerCase().includes("cgt-exempt"))     return "CGT-exempt";
-  if (w.tax.toLowerCase().includes("isa"))            return "ISA tax-free";
+  if (w.tax.toLowerCase().includes("state-tax-free")) return "No state tax (federal still applies)";
+  if (w.tax.toLowerCase().includes("cgt-exempt"))     return "CGT-exempt (income tax still applies)";
+  if (w.tax.toLowerCase().includes("isa"))            return "ISA — tax-free within allowance";
   if (w.tax.toLowerCase().includes("real"))           return "Inflation-linked";
-  if (w.tax.toLowerCase().includes("ucits"))          return "UCITS-efficient";
+  if (w.tax.toLowerCase().includes("ucits"))          return "UCITS-efficient (per residence)";
   return w.tax;
 }
 
@@ -437,27 +437,31 @@ const EXPENSE_RATIOS_BPS: Array<[RegExp, number]> = [
 ];
 
 /**
- * Always-visible rationale for the recommendation card. Two modes:
- * - When an alternative beats the rec on headline rate, defend with the trade-off.
- * - When the rec is also the highest-yielding option, frame the match positively.
+ * Always-visible rationale for the recommendation card.
  *
- * Keeping this slot always populated stabilises the card's vertical height
- * across bucket changes (the box no longer appears/disappears).
+ * Returns two short lines:
+ *   `body`     — defends the rec (or frames it positively if it's also the
+ *                highest-yielding option).
+ *   `altBody`  — surfaces *when the alternative might actually be better*, so
+ *                the page reads as even-handed rather than promotional.
+ *
+ * Both kept short ("one-breath readable") because retail users skim.
  */
 export function whyMatch(
   rec: Rung,
   topAlt: ComparatorRow | undefined
-): { eyebrow: string; body: string } {
+): { eyebrow: string; body: string; altBody?: string; altName?: string } {
   const recIsTreasury =
     rec.winner.coverage === "Treasury" || rec.winner.coverage === "Sovereign";
   const stateTaxFree = /state.?tax.?free/i.test(rec.winner.tax);
 
+  // No alt beats the rec on yield — positive framing, no need to defend.
   if (!topAlt || topAlt.apy <= rec.yield) {
     return {
       eyebrow: "Why this match",
       body: recIsTreasury
-        ? `Highest headline yield at this horizon, fully government-backed${stateTaxFree ? " and state-tax-free" : ""}. No compromise on safety to get the rate.`
-        : `Highest headline yield available at this horizon with the cleanest credit profile in the bucket.`,
+        ? `Highest yield in this horizon, fully government-backed${stateTaxFree ? " and state-tax-free" : ""}. No compromise on safety.`
+        : `Highest yield available with the cleanest credit profile in this horizon.`,
     };
   }
 
@@ -468,28 +472,36 @@ export function whyMatch(
   if (recIsTreasury && altIsCd) {
     return {
       eyebrow: "Why this still wins",
-      body: `Higher headline rate, but ${topAlt.vehicle} is fully taxable and locks you in with an early-withdrawal penalty.${
-        stateTaxFree ? " State-tax-free government bonds usually win after-tax." : ""
-      }`,
+      body: stateTaxFree
+        ? "CD pays more upfront, but taxes plus lock-in usually swing it: state-tax-free Treasuries win after-tax."
+        : "CD pays more upfront, but the early-withdrawal penalty plus tax usually swing it after-tax.",
+      altName: topAlt.vehicle,
+      altBody: "Pick the CD if you don't pay state tax, want a fixed return, and won't need early access.",
     };
   }
   if (recIsTreasury && altIsHysa) {
     return {
       eyebrow: "Why this still wins",
-      body: `Higher headline rate, but ${topAlt.vehicle} is fully taxable and the rate can change anytime.${
-        stateTaxFree ? " State-tax-free government bonds usually win after-tax." : ""
-      }`,
+      body: stateTaxFree
+        ? `${topAlt.vehicle} pays more, but it's fully taxable and the rate can drop any day.`
+        : `${topAlt.vehicle} pays more, but the rate is variable and can drop without notice.`,
+      altName: topAlt.vehicle,
+      altBody: "Pick the HYSA if you want pure daily liquidity and don't mind the rate moving.",
     };
   }
   if (recIsTreasury && altIsPrimeMmf) {
     return {
       eyebrow: "Why this still wins",
-      body: `${topAlt.vehicle} pays more by holding commercial paper — slight credit risk vs. pure Treasury.`,
+      body: "Prime MMF pays more by holding commercial paper — slight credit risk vs. pure Treasury.",
+      altName: topAlt.vehicle,
+      altBody: "Pick Prime MMF if you're comfortable with diversified short-term corporate paper.",
     };
   }
   return {
     eyebrow: "Why this still wins",
-    body: `Higher headline rate, but trade-offs in tax, lockup, or credit profile usually swing the after-tax outcome.`,
+    body: "Higher headline rate, but tax, lockup, or credit usually swing the after-tax outcome.",
+    altName: topAlt.vehicle,
+    altBody: `Pick ${topAlt.vehicle} if its specific trade-offs fit your situation better.`,
   };
 }
 

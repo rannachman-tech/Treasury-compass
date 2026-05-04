@@ -21,7 +21,6 @@ import {
   rowSourceTier,
   rungYears,
   SOURCE_TIER_HINT,
-  SOURCE_TIER_LABEL,
   whyMatch,
   type Bucket,
 } from "@/lib/simple";
@@ -183,6 +182,17 @@ export function SimpleHero({
                   const delta = altValue - futureValue;
                   const tier = rowSourceTier(alt);
                   const erBps = expenseRatioBps(alt);
+                  // Coverage-based label keeps both columns on the same axis
+                  // (Government-backed / Bank-backed / Money-market / Market-priced)
+                  // — same vocabulary as the recommendation card's safety badge.
+                  const coverageLabel =
+                    alt.coverage === "Treasury" || alt.coverage === "Sovereign"
+                      ? "Government-backed"
+                      : alt.coverage === "FDIC" || alt.coverage === "FSCS" || alt.coverage === "Deposit-EU"
+                      ? "Bank-backed"
+                      : alt.coverage === "MMF"
+                      ? "Money-market"
+                      : "Market-priced";
                   return (
                     <div
                       key={alt.vehicle}
@@ -198,12 +208,12 @@ export function SimpleHero({
                           </span>
                         </div>
                         <p
-                          className="mt-0.5 flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-fg-subtle"
+                          className="mt-0.5 flex items-center gap-1.5 text-[10.5px] text-fg-subtle"
                           title={SOURCE_TIER_HINT[tier]}
                         >
-                          <span>{SOURCE_TIER_LABEL[tier]}</span>
+                          <span className="font-medium text-fg-muted">{coverageLabel}</span>
                           <span className="text-border-strong">·</span>
-                          <span className="truncate normal-case tracking-normal font-sans">{alt.lockup}</span>
+                          <span className="truncate">{alt.lockup}</span>
                           {erBps > 0 && (
                             <>
                               <span className="text-border-strong">·</span>
@@ -294,7 +304,7 @@ interface RecommendationCardProps {
   lockupLine: string;
   taxLine: string;
   catchLine: string;
-  why: { eyebrow: string; body: string };
+  why: { eyebrow: string; body: string; altBody?: string; altName?: string };
   basket: Basket;
   onTrade: () => void;
 }
@@ -384,14 +394,23 @@ function RecommendationCard({
         Catch: <span className="text-fg">{catchLine.toLowerCase()}</span>.
       </p>
 
-      {/* Always-visible rationale — keeps the card height stable across buckets.
-          Eyebrow text adapts: defensive when an alt has a higher headline rate,
-          positive when the rec is also the highest-yielding option. */}
-      <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted">
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
-          {why.eyebrow}:
-        </span>
-        {why.body}
+      {/* Always-visible rationale — defensive or positive, plus a symmetric
+          "when the alt might be better" line so the page reads as even-handed. */}
+      <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted space-y-1">
+        <p>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
+            {why.eyebrow}:
+          </span>
+          {why.body}
+        </p>
+        {why.altBody && (
+          <p className="text-fg-subtle">
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-muted mr-1.5">
+              When {why.altName ? why.altName : "the alt"} wins:
+            </span>
+            {why.altBody}
+          </p>
+        )}
       </div>
 
       {/* CTA */}
@@ -403,8 +422,12 @@ function RecommendationCard({
         >
           Buy on eToro <ExternalLink size={14} />
         </button>
-        <span className="text-[11px] text-fg-subtle">
-          via <span className="font-medium text-fg-muted">{basket.holdings.map((h) => h.ticker).join(" · ")}</span>
+        <span
+          className="text-[11px] text-fg-subtle leading-snug"
+          title={`Buying this basket splits your money across ${basket.holdings.length} ETFs that together mimic the recommended exposure with daily liquidity.`}
+        >
+          via {basket.holdings.length} ETFs that wrap this exposure ·{" "}
+          <span className="font-medium text-fg-muted">{basket.holdings.map((h) => h.ticker).join(" · ")}</span>
         </span>
       </div>
     </div>
