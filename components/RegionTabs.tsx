@@ -15,7 +15,7 @@ export function RegionTabs({ value, onChange }: Props) {
     <nav
       role="tablist"
       aria-label="Region"
-      className="inline-flex rounded-md border border-border bg-surface-2 p-0.5"
+      className="inline-flex rounded-full border border-border bg-surface-2 p-0.5 shadow-[var(--shadow-soft)]"
     >
       {REGIONS.map((r) => {
         const active = r === value;
@@ -26,9 +26,9 @@ export function RegionTabs({ value, onChange }: Props) {
             aria-selected={active}
             onClick={() => onChange(r)}
             className={[
-              "rounded-sm px-2.5 sm:px-3 py-1.5 text-[12px] font-medium transition-all",
+              "relative rounded-full px-3 sm:px-3.5 py-1.5 text-[12px] font-medium transition-all duration-200",
               active
-                ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.45)]"
+                ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.5)]"
                 : "text-fg-muted hover:text-fg",
             ].join(" ")}
           >

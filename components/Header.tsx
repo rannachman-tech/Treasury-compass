@@ -26,17 +26,17 @@ export function Header({ mode, onModeChange }: Props) {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-3">
-          <a href="/" className="group flex items-center gap-2 min-w-0">
-            <span className="grid h-7 w-7 place-items-center rounded-md border border-accent/40 bg-accent/10 text-accent shrink-0">
-              <Compass size={15} />
+      <header className="sticky top-0 z-30 border-b border-border bg-bg/75 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-2.5">
+          <a href="/" className="group flex items-center gap-2.5 min-w-0 transition-transform hover:scale-[1.005]">
+            <span className="grid h-8 w-8 place-items-center rounded-lg border border-accent/40 bg-gradient-to-br from-accent/15 to-accent/5 text-accent transition-shadow group-hover:shadow-[0_0_0_3px_rgb(var(--accent)/0.10)]">
+              <Compass size={16} strokeWidth={1.75} />
             </span>
             <div className="leading-tight min-w-0">
-              <div className="text-[13.5px] font-semibold text-fg truncate">
+              <div className="text-[14px] font-semibold tracking-tight text-fg truncate">
                 Treasury Yield Compass
               </div>
-              <div className="text-[10.5px] font-mono uppercase tracking-[0.18em] text-fg-subtle hidden sm:block">
+              <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-fg-subtle hidden sm:block">
                 Where to park cash · live
               </div>
             </div>
@@ -49,7 +49,7 @@ export function Header({ mode, onModeChange }: Props) {
                 type="button"
                 onClick={() => setOpen(true)}
                 aria-label="Connect eToro"
-                className="inline-flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent/10 px-2 sm:px-2.5 py-1.5 text-[12.5px] font-medium text-accent hover:bg-accent/20"
+                className="inline-flex items-center gap-1.5 rounded-md border border-accent/50 bg-accent/10 px-2 sm:px-2.5 py-1.5 text-[12.5px] font-medium text-accent hover:bg-accent/20 transition-colors"
               >
                 <Plug size={13} />
                 <span className="hidden sm:inline">Connect eToro</span>
@@ -59,7 +59,7 @@ export function Header({ mode, onModeChange }: Props) {
                 <button
                   type="button"
                   onClick={() => setMenu((v) => !v)}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-positive/30 bg-positive/10 px-2.5 py-1.5 text-[12.5px] text-positive"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-positive/30 bg-positive/10 px-2.5 py-1.5 text-[12.5px] text-positive transition-colors hover:bg-positive/15"
                 >
                   <CheckCircle2 size={13} />
                   <span className="font-medium">@{session.username}</span>

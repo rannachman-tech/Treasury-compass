@@ -12,7 +12,7 @@ export function ModeToggle({ value, onChange }: Props) {
     <div
       role="radiogroup"
       aria-label="Display mode"
-      className="inline-flex rounded-md border border-border bg-surface-2 p-0.5 text-[11.5px]"
+      className="relative inline-flex rounded-full border border-border bg-surface-2 p-0.5 text-[11.5px]"
     >
       {(["simple", "pro"] as const).map((m) => {
         const active = m === value;
@@ -23,9 +23,9 @@ export function ModeToggle({ value, onChange }: Props) {
             aria-checked={active}
             onClick={() => onChange(m)}
             className={[
-              "rounded-sm px-2 py-1 font-medium transition-colors capitalize",
+              "relative rounded-full px-2.5 py-1 font-semibold transition-colors capitalize",
               active
-                ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.45)]"
+                ? "bg-surface text-fg shadow-[inset_0_0_0_1px_rgb(var(--accent)/0.5)]"
                 : "text-fg-muted hover:text-fg",
             ].join(" ")}
           >

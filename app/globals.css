@@ -2,63 +2,250 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────────
+   Treasury Yield Compass — design tokens
+   Aesthetic: editorial paper + brass, executed like a 2026 fintech
+   ───────────────────────────────────────────────────────────────────── */
+
 :root {
-  /* Treasury palette — paper + ink + brass */
-  --bg: 250 248 244;          /* parchment */
+  /* Surfaces */
+  --bg: 250 248 244;
   --surface: 255 254 251;
   --surface-2: 245 242 235;
+  --surface-3: 238 234 225;
   --border: 226 220 207;
   --border-strong: 196 184 158;
+
+  /* Type */
   --fg: 22 24 30;
   --fg-muted: 78 78 82;
   --fg-subtle: 124 122 116;
-  --accent: 138 102 31;        /* brass */
-  --accent-muted: 196 168 100;
-  --positive: 36 110 65;
+
+  /* Accent — refined brass */
+  --accent: 158 116 38;
+  --accent-soft: 188 152 78;
+  --accent-muted: 220 196 142;
+  --accent-glow: 158 116 38;
+
+  /* Semantic */
+  --positive: 32 122 70;
+  --positive-soft: 96 178 130;
   --warn: 168 113 28;
+  --warn-soft: 224 168 70;
   --danger: 174 50 50;
+  --danger-soft: 222 110 110;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px 0 rgb(40 36 26 / 0.04), 0 1px 1px 0 rgb(40 36 26 / 0.03);
+  --shadow-lift: 0 6px 20px -8px rgb(40 36 26 / 0.12), 0 2px 4px -2px rgb(40 36 26 / 0.06);
+  --shadow-glow: 0 0 0 1px rgb(var(--accent) / 0.30), 0 8px 28px -10px rgb(var(--accent) / 0.45);
 }
 
 .dark {
   --bg: 14 15 18;
-  --surface: 20 22 26;
-  --surface-2: 26 28 33;
+  --surface: 22 24 29;
+  --surface-2: 28 30 36;
+  --surface-3: 36 38 45;
   --border: 41 44 52;
   --border-strong: 70 75 85;
-  --fg: 232 230 224;
-  --fg-muted: 178 176 170;
-  --fg-subtle: 132 130 124;
-  --accent: 220 184 96;        /* brass on dark */
-  --accent-muted: 158 130 70;
-  --positive: 86 188 130;
-  --warn: 235 178 80;
-  --danger: 240 110 110;
+
+  --fg: 240 238 232;
+  --fg-muted: 184 180 172;
+  --fg-subtle: 134 132 124;
+
+  --accent: 232 196 110;
+  --accent-soft: 200 168 92;
+  --accent-muted: 168 138 76;
+  --accent-glow: 232 196 110;
+
+  --positive: 110 208 150;
+  --positive-soft: 86 188 130;
+  --warn: 240 188 92;
+  --warn-soft: 224 168 70;
+  --danger: 244 124 124;
+  --danger-soft: 222 110 110;
+
+  --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.4), 0 1px 1px 0 rgb(0 0 0 / 0.25);
+  --shadow-lift: 0 8px 24px -10px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.3);
+  --shadow-glow: 0 0 0 1px rgb(var(--accent) / 0.4), 0 8px 28px -10px rgb(var(--accent) / 0.4);
 }
 
-html, body { background: rgb(var(--bg)); color: rgb(var(--fg)); }
-body { font-feature-settings: "ss01", "cv11"; }
+/* ─────────────────────────────────────────────────────────────────────
+   Page-level
+   ───────────────────────────────────────────────────────────────────── */
+
+html, body {
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-feature-settings: "ss01", "cv11", "cv09";
+}
+
+/* Almost-invisible page warmth — gives depth without looking busy. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(80% 60% at 50% -10%, rgb(var(--accent) / 0.045), transparent 70%),
+    radial-gradient(60% 60% at 100% 100%, rgb(var(--accent) / 0.025), transparent 60%);
+}
+
+.dark body::before {
+  background:
+    radial-gradient(80% 60% at 50% -10%, rgb(var(--accent) / 0.06), transparent 70%),
+    radial-gradient(60% 60% at 100% 100%, rgb(var(--accent) / 0.03), transparent 60%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Type utilities
+   ───────────────────────────────────────────────────────────────────── */
 
 .tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+.feature-numbers { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum", "lnum"; }
 
-/* Subtle paper grain on surfaces */
+/* Display headline — for hero numbers */
+.display {
+  font-feature-settings: "tnum", "lnum", "ss01";
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Editorial caps */
+.eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--fg-subtle));
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Surface treatments
+   ───────────────────────────────────────────────────────────────────── */
+
 .paper {
   background-image:
     radial-gradient(circle at 20% 0%, rgb(var(--surface-2) / 0.6), transparent 40%),
     radial-gradient(circle at 100% 100%, rgb(var(--surface-2) / 0.4), transparent 50%);
 }
 
-/* Selection */
-::selection { background: rgb(var(--accent) / 0.25); color: rgb(var(--fg)); }
+.card {
+  background: rgb(var(--surface));
+  border: 0.5px solid rgb(var(--border));
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
 
-/* Custom scroll for tables */
+.card-lift:hover {
+  border-color: rgb(var(--border-strong));
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-1px);
+}
+
+.card-active {
+  border-color: rgb(var(--accent) / 0.6);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Selection + scrollbar + focus
+   ───────────────────────────────────────────────────────────────────── */
+
+::selection { background: rgb(var(--accent) / 0.28); color: rgb(var(--fg)); }
+
 .scroll-x { overflow-x: auto; scrollbar-width: thin; }
 .scroll-x::-webkit-scrollbar { height: 8px; }
-.scroll-x::-webkit-scrollbar-thumb { background: rgb(var(--border-strong)); border-radius: 4px; }
+.scroll-x::-webkit-scrollbar-thumb {
+  background: rgb(var(--border-strong));
+  border-radius: 4px;
+}
+.scroll-x::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent) / 0.5);
+}
 
-/* Quiet focus */
 *:focus { outline: none; }
 *:focus-visible {
   outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Buttons
+   ───────────────────────────────────────────────────────────────────── */
+
+.btn-primary {
+  background: rgb(var(--accent));
+  color: rgb(var(--bg));
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  transition: filter 200ms ease, transform 80ms ease, box-shadow 200ms ease;
+  box-shadow: var(--shadow-soft);
+}
+.btn-primary:hover {
+  filter: brightness(1.06);
+  box-shadow: var(--shadow-lift);
+}
+.btn-primary:active {
+  transform: scale(0.985);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Animations
+   ───────────────────────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.scale-in { animation: scale-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes draw-line {
+  from { stroke-dashoffset: var(--draw-len, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+.draw-line {
+  stroke-dasharray: var(--draw-len, 1000);
+  stroke-dashoffset: var(--draw-len, 1000);
+  animation: draw-line 900ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--accent) / 0.35); }
+  50%      { box-shadow: 0 0 0 6px rgb(var(--accent) / 0); }
+}
+.pulse-soft { animation: pulse-soft 1800ms ease-in-out 2; }
+
+@keyframes shimmer {
+  0%   { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+.shimmer {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(var(--accent) / 0.18) 40%,
+    rgb(var(--accent) / 0.18) 60%,
+    transparent 100%
+  );
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  animation: shimmer 1600ms ease-in-out infinite;
+}
+
+/* Reduced-motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up, .scale-in, .draw-line, .pulse-soft, .shimmer {
+    animation: none !important;
+  }
 }
