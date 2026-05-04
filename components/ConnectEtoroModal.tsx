@@ -106,8 +106,7 @@ export function ConnectEtoroModal({ open, onClose }: Props) {
 
         <form onSubmit={submit} className="space-y-3 px-5 py-4">
           <p className="text-[12.5px] leading-snug text-fg-muted">
-            We auto-detect demo vs. real account. Keys live in your browser only —
-            we never see them.
+            Keys live in your browser only — we never see them.
           </p>
 
           <Field
@@ -129,11 +128,11 @@ export function ConnectEtoroModal({ open, onClose }: Props) {
               Where do I get these?
             </summary>
             <ol className="mt-1.5 list-decimal pl-4 leading-snug space-y-0.5">
+              <li>Sign in to your eToro account.</li>
               <li>
-                Sign in to <span className="font-mono">developers.etoro.com</span>.
+                Open <span className="font-mono">Settings → Trading → API keys</span>.
               </li>
-              <li>Create an app — request market-data + trading scopes.</li>
-              <li>Copy the Public API Key + Private Key into the fields above.</li>
+              <li>Generate a key pair, then copy the Public API Key + Private Key into the fields above.</li>
             </ol>
           </details>
 

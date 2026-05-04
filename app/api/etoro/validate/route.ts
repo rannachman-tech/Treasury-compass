@@ -44,15 +44,17 @@ export async function POST(req: Request) {
     "x-request-id": rid(),
   };
 
-  // Step 1 — /me
-  const meRes = await fetch(`${BASE}/user/me`, { headers });
+  // Step 1 — /me  (canonical path per the eToro Public API; /user/me 404s)
+  const meRes = await fetch(`${BASE}/me`, { headers });
   if (!meRes.ok) {
+    const body = await meRes.text().catch(() => "");
     return Response.json(
       {
         ok: false,
-        error: `eToro rejected the keys (${meRes.status}). Double-check the Public + Private key combo.`,
+        error: `eToro rejected the keys (HTTP ${meRes.status}). Verify the Public API Key + Private Key from Settings → Trading → API keys.`,
+        debug: body.slice(0, 200),
       },
-      { status: 401 }
+      { status: meRes.status === 401 || meRes.status === 403 ? 401 : 502 }
     );
   }
   const me = (await meRes.json()) as MeResp;
