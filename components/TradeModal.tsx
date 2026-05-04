@@ -100,11 +100,12 @@ export function TradeModal({ open, onClose, basket, session, onAskConnect }: Pro
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex items-center justify-between border-b border-border px-5 py-3">
-          <div className="min-w-0">
-            <h3 className="flex items-center gap-2 text-[14px] font-semibold truncate">
-              <Wallet size={14} className="text-accent" /> {basket.title}
+          <div className="min-w-0 pr-2">
+            <h3 className="flex items-start gap-2 text-[14px] font-semibold leading-snug">
+              <Wallet size={14} className="mt-0.5 text-accent shrink-0" />
+              <span>{basket.title}</span>
             </h3>
-            <p className="mt-0.5 text-[11px] text-fg-subtle truncate">{basket.thesis}</p>
+            <p className="mt-1 text-[11.5px] text-fg-muted leading-snug">{basket.thesis}</p>
           </div>
           <button
             type="button"
@@ -314,7 +315,7 @@ function AllocationTable({
           {allocation.map((a) => (
             <tr key={a.ticker} className="border-b border-border last:border-0">
               <td className="px-3 py-2 font-medium">{a.ticker}</td>
-              <td className="px-3 py-2 text-fg-muted truncate">{a.name}</td>
+              <td className="px-3 py-2 text-fg-muted leading-snug">{a.name}</td>
               <td className="px-3 py-2 text-right tabular">{a.weight}%</td>
               <td className="px-3 py-2 text-right tabular">${a.dollars.toLocaleString()}</td>
             </tr>
