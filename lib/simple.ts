@@ -49,6 +49,24 @@ export function bucketYears(bucket: Bucket): number {
   }
 }
 
+/**
+ * Maturity in years derived from a Rung's maturity id. Used as the projection
+ * horizon so the displayed dollar value matches the *actual* product the user
+ * would buy (e.g. a 5-year Treasury projects over 5 years, not the bucket
+ * midpoint of 3 years).
+ */
+export function rungYears(rung: Rung): number {
+  switch (rung.id) {
+    case "overnight": return 0.083;
+    case "3mo":       return 0.25;
+    case "6mo":       return 0.5;
+    case "1y":        return 1;
+    case "2y":        return 2;
+    case "5y":        return 5;
+    case "10y":       return 10;
+  }
+}
+
 /** Plain-English description of a Winner — replaces jargon with concrete words. */
 export function plainEnglishName(w: Winner): string {
   switch (w.vehicle) {
@@ -70,17 +88,17 @@ export function plainEnglishName(w: Winner): string {
 /** "What's the catch?" — the trade-off in plain words. */
 export function plainEnglishCatch(w: Winner): string {
   switch (w.vehicle) {
-    case "T-bill":      return "Hold to maturity for full safety";
-    case "Note":        return "Early sale = market-price risk";
-    case "Treasury":    return "Early sale = market-price risk";
-    case "TIPS":        return "Real-yield can be small";
-    case "Bund":        return "Hold to maturity for stated yield";
-    case "Gilt":        return "Hold to maturity for stated yield";
+    case "T-bill":      return "Hold to maturity for the stated yield";
+    case "Note":        return "You can sell early, but the price may be higher or lower than what you paid";
+    case "Treasury":    return "You can sell early, but the price may be higher or lower than what you paid";
+    case "TIPS":        return "Real-yield can be small in calm inflation";
+    case "Bund":        return "Hold to maturity for the stated yield";
+    case "Gilt":        return "Hold to maturity for the stated yield";
     case "Sovereign-EU":return "Issuer credit varies by country";
-    case "Linker":      return "Lower yield in calm-inflation regimes";
-    case "MMF":         return "Yield resets daily";
-    case "HYSA":        return "Bank can change rate anytime";
-    case "CD":          return "Early withdrawal penalty";
+    case "Linker":      return "Lower yield when inflation is calm";
+    case "MMF":         return "Yield resets daily; not federally insured";
+    case "HYSA":        return "Bank can change the rate anytime";
+    case "CD":          return "Early withdrawal triggers a penalty";
     case "ETF":         return "Daily price moves with rates";
   }
 }
@@ -157,23 +175,23 @@ export function rateTemperature(
   if (delta > 0.5) {
     return {
       state: "high",
-      label: "Above 5-year average",
-      hint: "Rates are elevated — locking in now is favourable historically.",
+      label: "Higher than usual",
+      hint: `Rates are elevated vs. the 5-year median (${(currentYield * 100).toFixed(0)} bp vs ${(median * 100).toFixed(0)} bp). Historically a favourable moment to lock in.`,
       delta,
     };
   }
   if (delta < -0.5) {
     return {
       state: "low",
-      label: "Below 5-year average",
-      hint: "Rates have dropped — consider shorter maturities or wait.",
+      label: "Lower than usual",
+      hint: `Rates have dropped vs. the 5-year median. Consider shorter maturities or wait.`,
       delta,
     };
   }
   return {
     state: "average",
-    label: "Around 5-year average",
-    hint: "Rates are near the typical 5-year level.",
+    label: "Typical for the past 5 years",
+    hint: `Rates are near the 5-year median — neither cheap nor rich.`,
     delta,
   };
 }
@@ -417,6 +435,43 @@ const EXPENSE_RATIOS_BPS: Array<[RegExp, number]> = [
   [/MMF \(Prime\)|EUR MMF|GBP MMF/i, 11],
   [/Money-market|MMF/i, 10],
 ];
+
+/**
+ * When an alternative shows a higher dollar gain than the recommendation,
+ * explain WHY the rec still wins. This addresses the trust-break of
+ * "you said Best match, but the CD pays more — why?"
+ *
+ * Returns null when the rec is also the highest-yielding option (no need to defend).
+ */
+export function whyOverAlternative(
+  rec: Rung,
+  topAlt: ComparatorRow | undefined
+): string | null {
+  if (!topAlt) return null;
+  if (topAlt.apy <= rec.yield) return null;
+
+  const altIsCd = /\bCD\b|fixed.?rate bond|term deposit/i.test(topAlt.vehicle);
+  const altIsHysa = /HYSA|easy.?access|savings|cash ISA|premium bonds?/i.test(topAlt.vehicle);
+  const altIsPrimeMmf = /\bPrime\b/i.test(topAlt.vehicle);
+  const recIsTreasury =
+    rec.winner.coverage === "Treasury" || rec.winner.coverage === "Sovereign";
+  const stateTaxFree = /state.?tax.?free/i.test(rec.winner.tax);
+
+  if (recIsTreasury && altIsCd) {
+    return `Higher headline rate, but ${topAlt.vehicle} is taxed federal + state and locks you in with an early-withdrawal penalty.${
+      stateTaxFree ? " State-tax-free Treasury usually wins after-tax." : ""
+    }`;
+  }
+  if (recIsTreasury && altIsHysa) {
+    return `Higher headline rate, but ${topAlt.vehicle} is fully taxable and the rate can change anytime.${
+      stateTaxFree ? " State-tax-free Treasury usually wins after-tax." : ""
+    }`;
+  }
+  if (recIsTreasury && altIsPrimeMmf) {
+    return `${topAlt.vehicle} pays more by holding commercial paper — slight credit risk vs. pure Treasury.`;
+  }
+  return `Higher headline rate, but trade-offs in tax, lockup, or credit profile usually swing the after-tax outcome.`;
+}
 
 /** Look up expense ratio in bps. 0 if no wrapper (direct Treasury, deposit). */
 export function expenseRatioBps(row: ComparatorRow): number {

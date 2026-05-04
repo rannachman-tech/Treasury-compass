@@ -8,7 +8,6 @@ import {
   alternativesFor,
   bestRungForBucket,
   BUCKETS,
-  bucketYears,
   currencySymbol,
   expenseRatioBps,
   fmtMoney,
@@ -20,8 +19,10 @@ import {
   projectValue,
   rateTemperature,
   rowSourceTier,
+  rungYears,
   SOURCE_TIER_HINT,
   SOURCE_TIER_LABEL,
+  whyOverAlternative,
   type Bucket,
 } from "@/lib/simple";
 
@@ -65,12 +66,17 @@ export function SimpleHero({
 }: Props) {
   const horizon = BUCKETS.find((b) => b.id === bucket)!.horizon;
   const bestRung = bestRungForBucket(regionData.rungs, bucket);
-  const years = bucketYears(bucket);
+  // Project at the recommendation's actual maturity, not a bucket midpoint —
+  // so a 5-year Treasury Note projects over 5 years (matches the product).
+  const years = rungYears(bestRung);
   const futureValue = projectValue(amount, bestRung.yield, years);
   const gain = futureValue - amount;
   const sym = currencySymbol(regionData.currency);
   const temp = rateTemperature(regionData.history, bucket, bestRung.yield);
   const alternatives = alternativesFor(bucket, regionData, bestRung.winner.name);
+  // The runner-up by raw value. If it beats the rec on $, we owe an explanation.
+  const topAltByValue = [...alternatives].sort((a, b) => b.apy - a.apy)[0];
+  const whyLine = whyOverAlternative(bestRung, topAltByValue);
 
   // Sync horizon back to the parent so Pro mode stays consistent.
   useEffect(() => {
@@ -246,6 +252,7 @@ export function SimpleHero({
             lockupLine={plainEnglishLockup(bestRung.winner, bucket)}
             taxLine={plainEnglishTax(bestRung.winner)}
             catchLine={plainEnglishCatch(bestRung.winner)}
+            whyLine={whyLine}
             basket={basketFor(horizon, region)}
             onTrade={onTrade}
           />
@@ -287,6 +294,7 @@ interface RecommendationCardProps {
   lockupLine: string;
   taxLine: string;
   catchLine: string;
+  whyLine: string | null;
   basket: Basket;
   onTrade: () => void;
 }
@@ -305,6 +313,7 @@ function RecommendationCard({
   lockupLine,
   taxLine,
   catchLine,
+  whyLine,
   basket,
   onTrade,
 }: RecommendationCardProps) {
@@ -350,6 +359,12 @@ function RecommendationCard({
             <span className="tabular text-positive font-medium">+{sym}{Math.round(gain).toLocaleString()}</span>
           </span>
         </div>
+        <p
+          className="mt-1 text-[10.5px] text-fg-subtle/80"
+          title="Compounded annually at the stated yield. Real-world returns vary as rates move and as coupons are reinvested at then-current rates."
+        >
+          Assumes the yield holds and coupons reinvest at the same rate.
+        </p>
       </div>
 
       {/* Growth curve */}
@@ -368,6 +383,17 @@ function RecommendationCard({
         {" "}
         Catch: <span className="text-fg">{catchLine.toLowerCase()}</span>.
       </p>
+
+      {/* "Why beats higher-yielding alt" — surfaces only when an alternative
+          shows a higher headline rate, defending the recommendation explicitly. */}
+      {whyLine && (
+        <div className="rounded-md border border-accent/25 bg-accent/8 px-3 py-2 text-[12px] leading-snug text-fg-muted">
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent mr-1.5">
+            Why this still wins:
+          </span>
+          {whyLine}
+        </div>
+      )}
 
       {/* CTA */}
       <div className="flex flex-wrap items-center gap-3 pt-1">
