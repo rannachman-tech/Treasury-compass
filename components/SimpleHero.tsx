@@ -23,7 +23,7 @@ import {
 
 import { SafetyLaneMap } from "@/components/SafetyLaneMap";
 import { RateTemperature } from "@/components/RateTemperature";
-import { Calendar, Clock, Layers, MountainSnow, ShieldCheck, ChevronRight, ExternalLink } from "lucide-react";
+import { Calendar, Clock, Layers, MountainSnow, ShieldCheck, ExternalLink, type LucideIcon } from "lucide-react";
 
 interface Props {
   region: RegionId;
@@ -38,7 +38,7 @@ interface Props {
   onTrade: () => void;
 }
 
-const BUCKET_ICONS: Record<Bucket, React.ComponentType<{ size?: number; className?: string }>> = {
+const BUCKET_ICONS: Record<Bucket, LucideIcon> = {
   anytime: Clock,
   months:  Calendar,
   years:   Layers,
