@@ -1,531 +1,385 @@
 {
-  "generatedAt": "2026-05-04T09:12:42.472Z",
-  "cpiYoy": 3.32,
-  "fedFunds": 3.64,
-  "curve": [
-    {
-      "maturity": 0.083,
-      "yield": 3.64,
-      "prevYield": 3.64
+  "generatedAt": "2026-05-04T09:00:00Z",
+  "regions": {
+    "us": {
+      "currency": "USD",
+      "policyRate": 3.50,
+      "policyRateLabel": "Fed Funds",
+      "cpiYoy": 2.4,
+      "cpiLabel": "CPI",
+      "taxModel": {
+        "primaryLabel": "Federal tax %",
+        "primaryDefault": 24,
+        "secondaryLabel": "State tax %",
+        "secondaryDefault": 5,
+        "exemptBadge": "State-tax-free",
+        "taxNote": "U.S. Treasury interest is exempt from state and local income tax — meaningful in CA, NY, and other high-tax states."
+      },
+      "parkCopy": {
+        "short": "Buy the short-duration T-bill basket — daily liquid, state-tax-free.",
+        "medium": "Lock 6–12 months with daily-liquid short Treasury ETFs.",
+        "long": "Stretch to 5y for term premium without giving up ETF liquidity.",
+        "ultra": "Long-duration Treasuries — convexity to Fed cuts."
+      },
+      "curve": [
+        { "maturity": 0.083, "yield": 3.50, "prevYield": 3.55 },
+        { "maturity": 0.25,  "yield": 3.50, "prevYield": 3.55 },
+        { "maturity": 0.5,   "yield": 3.55, "prevYield": 3.61 },
+        { "maturity": 1,     "yield": 3.62, "prevYield": 3.69 },
+        { "maturity": 2,     "yield": 3.85, "prevYield": 3.93 },
+        { "maturity": 3,     "yield": 3.95, "prevYield": 4.02 },
+        { "maturity": 5,     "yield": 4.10, "prevYield": 4.18 },
+        { "maturity": 7,     "yield": 4.25, "prevYield": 4.33 },
+        { "maturity": 10,    "yield": 4.40, "prevYield": 4.48 },
+        { "maturity": 20,    "yield": 4.65, "prevYield": 4.73 },
+        { "maturity": 30,    "yield": 4.55, "prevYield": 4.63 }
+      ],
+      "rungs": [
+        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 3.45, "horizon": "<3mo",
+          "winner": { "name": "Treasury MMF (VUSXX)", "issuer": "Vanguard", "yield": 3.45, "coverage": "MMF", "lockup": "Daily liquid", "tax": "State-tax-free (Treasury)", "vehicle": "MMF", "etoroTicker": "BIL", "etoroInstrumentId": 4407 } },
+        { "id": "3mo", "label": "3 months", "position": 1, "yield": 3.50, "horizon": "<3mo",
+          "winner": { "name": "13-week T-bill", "issuer": "U.S. Treasury", "yield": 3.50, "coverage": "Treasury", "lockup": "91 days", "tax": "State-tax-free", "vehicle": "T-bill", "etoroTicker": "BIL", "etoroInstrumentId": 4407 } },
+        { "id": "6mo", "label": "6 months", "position": 2, "yield": 3.55, "horizon": "3-12mo",
+          "winner": { "name": "26-week T-bill", "issuer": "U.S. Treasury", "yield": 3.55, "coverage": "Treasury", "lockup": "182 days", "tax": "State-tax-free", "vehicle": "T-bill", "etoroTicker": "SHV", "etoroInstrumentId": 4321 } },
+        { "id": "1y", "label": "1 year", "position": 3, "yield": 3.62, "horizon": "3-12mo",
+          "winner": { "name": "52-week T-bill", "issuer": "U.S. Treasury", "yield": 3.62, "coverage": "Treasury", "lockup": "364 days", "tax": "State-tax-free", "vehicle": "T-bill", "etoroTicker": "SHV", "etoroInstrumentId": 4321 } },
+        { "id": "2y", "label": "2 years", "position": 4, "yield": 3.85, "horizon": "1-5y",
+          "winner": { "name": "2-year Treasury Note", "issuer": "U.S. Treasury", "yield": 3.85, "coverage": "Treasury", "lockup": "2 years", "tax": "State-tax-free", "vehicle": "Note", "etoroTicker": "SHV", "etoroInstrumentId": 4321 } },
+        { "id": "5y", "label": "5 years", "position": 5, "yield": 4.10, "horizon": "1-5y",
+          "winner": { "name": "5-year Treasury Note", "issuer": "U.S. Treasury", "yield": 4.10, "coverage": "Treasury", "lockup": "5 years", "tax": "State-tax-free", "vehicle": "Note", "etoroTicker": "IEF", "etoroInstrumentId": 3101 } },
+        { "id": "10y", "label": "10 years", "position": 6, "yield": 4.40, "horizon": "5y+",
+          "winner": { "name": "10-year Treasury Note", "issuer": "U.S. Treasury", "yield": 4.40, "coverage": "Treasury", "lockup": "10 years", "tax": "State-tax-free", "vehicle": "Note", "etoroTicker": "IEF", "etoroInstrumentId": 3101 } }
+      ],
+      "comparator": [
+        { "vehicle": "T-bill (4 wk)",      "apy": 3.48, "lockup": "28 days",   "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-bill (3 mo)",      "apy": 3.50, "lockup": "91 days",   "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-bill (6 mo)",      "apy": 3.55, "lockup": "182 days",  "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-Note (1 yr)",      "apy": 3.62, "lockup": "364 days",  "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-Note (2 yr)",      "apy": 3.85, "lockup": "2 years",   "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-Note (5 yr)",      "apy": 4.10, "lockup": "5 years",   "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "T-Note (10 yr)",     "apy": 4.40, "lockup": "10 years",  "coverage": "Treasury", "taxes": "State-tax-free",       "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "TIPS (5 yr)",        "apy": 1.85, "lockup": "5 years",   "coverage": "Treasury", "taxes": "State-tax-free, real", "minimum": "$100",   "issuer": "U.S. Treasury",  "issuerLink": "https://treasurydirect.gov", "secondaryTaxFree": true },
+        { "vehicle": "HYSA",               "apy": 3.75, "lockup": "Daily",     "coverage": "FDIC",     "taxes": "Federal + state",      "minimum": "$0",     "issuer": "Top tier banks", "issuerLink": "https://www.fdic.gov/resources/bankers/national-rates", "secondaryTaxFree": false },
+        { "vehicle": "MMF (Treasury)",     "apy": 3.55, "lockup": "Daily",     "coverage": "MMF",      "taxes": "State-tax-free",       "minimum": "$1",     "issuer": "Vanguard / Fidelity / Schwab", "secondaryTaxFree": true },
+        { "vehicle": "MMF (Prime)",        "apy": 3.78, "lockup": "Daily",     "coverage": "MMF",      "taxes": "Federal + state",      "minimum": "$1",     "issuer": "Vanguard / Fidelity / Schwab", "secondaryTaxFree": false },
+        { "vehicle": "Brokered CD (3 mo)", "apy": 3.55, "lockup": "3 months",  "coverage": "FDIC",     "taxes": "Federal + state",      "minimum": "$1,000", "issuer": "Various banks",  "issuerLink": "https://www.fdic.gov", "secondaryTaxFree": false },
+        { "vehicle": "Brokered CD (1 yr)", "apy": 3.85, "lockup": "12 months", "coverage": "FDIC",     "taxes": "Federal + state",      "minimum": "$1,000", "issuer": "Various banks",  "issuerLink": "https://www.fdic.gov", "secondaryTaxFree": false },
+        { "vehicle": "Brokered CD (5 yr)", "apy": 4.20, "lockup": "5 years",   "coverage": "FDIC",     "taxes": "Federal + state",      "minimum": "$1,000", "issuer": "Various banks",  "issuerLink": "https://www.fdic.gov", "secondaryTaxFree": false },
+        { "vehicle": "I Bond",             "apy": 3.10, "lockup": "12 months min, 5y to avoid penalty", "coverage": "Treasury", "taxes": "State-tax-free, federal-deferrable", "minimum": "$25", "issuer": "U.S. Treasury", "issuerLink": "https://treasurydirect.gov/savings-bonds/i-bonds/", "secondaryTaxFree": true }
+      ],
+      "history": [
+        { "date": "2021-05-03", "m3": 0.02, "y2": 0.16, "y10": 1.62, "policyRate": 0.06 },
+        { "date": "2021-08-02", "m3": 0.05, "y2": 0.18, "y10": 1.18, "policyRate": 0.10 },
+        { "date": "2021-11-01", "m3": 0.05, "y2": 0.45, "y10": 1.55, "policyRate": 0.08 },
+        { "date": "2022-02-01", "m3": 0.21, "y2": 1.18, "y10": 1.79, "policyRate": 0.08 },
+        { "date": "2022-05-02", "m3": 0.85, "y2": 2.72, "y10": 2.99, "policyRate": 0.33 },
+        { "date": "2022-08-01", "m3": 2.41, "y2": 2.91, "y10": 2.60, "policyRate": 2.33 },
+        { "date": "2022-11-01", "m3": 4.20, "y2": 4.55, "y10": 4.05, "policyRate": 3.83 },
+        { "date": "2023-02-01", "m3": 4.62, "y2": 4.20, "y10": 3.40, "policyRate": 4.57 },
+        { "date": "2023-05-01", "m3": 5.20, "y2": 4.05, "y10": 3.42, "policyRate": 5.08 },
+        { "date": "2023-08-01", "m3": 5.42, "y2": 4.90, "y10": 4.05, "policyRate": 5.33 },
+        { "date": "2023-11-01", "m3": 5.45, "y2": 5.05, "y10": 4.95, "policyRate": 5.33 },
+        { "date": "2024-02-01", "m3": 5.40, "y2": 4.36, "y10": 4.04, "policyRate": 5.33 },
+        { "date": "2024-05-01", "m3": 5.42, "y2": 5.04, "y10": 4.68, "policyRate": 5.33 },
+        { "date": "2024-08-01", "m3": 5.20, "y2": 4.16, "y10": 3.97, "policyRate": 5.33 },
+        { "date": "2024-11-01", "m3": 4.55, "y2": 4.20, "y10": 4.36, "policyRate": 4.83 },
+        { "date": "2025-02-01", "m3": 4.20, "y2": 4.20, "y10": 4.55, "policyRate": 4.33 },
+        { "date": "2025-05-01", "m3": 4.10, "y2": 3.95, "y10": 4.40, "policyRate": 4.33 },
+        { "date": "2025-08-01", "m3": 3.95, "y2": 3.85, "y10": 4.30, "policyRate": 4.08 },
+        { "date": "2025-11-01", "m3": 3.70, "y2": 3.80, "y10": 4.35, "policyRate": 3.83 },
+        { "date": "2026-02-01", "m3": 3.55, "y2": 3.85, "y10": 4.42, "policyRate": 3.58 },
+        { "date": "2026-05-01", "m3": 3.50, "y2": 3.85, "y10": 4.40, "policyRate": 3.50 }
+      ],
+      "sources": [
+        { "name": "FRED",           "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://fred.stlouisfed.org" },
+        { "name": "TreasuryDirect", "status": "live", "lastUpdate": "2026-05-03T16:00:00Z", "url": "https://treasurydirect.gov" },
+        { "name": "FDIC",           "status": "live", "lastUpdate": "2026-05-02T12:00:00Z", "url": "https://www.fdic.gov" }
+      ]
     },
-    {
-      "maturity": 0.25,
-      "yield": 3.68,
-      "prevYield": 3.69
+    "eu": {
+      "currency": "EUR",
+      "policyRate": 2.40,
+      "policyRateLabel": "ECB Deposit",
+      "cpiYoy": 2.0,
+      "cpiLabel": "HICP",
+      "taxModel": {
+        "primaryLabel": "Income tax %",
+        "primaryDefault": 30,
+        "secondaryLabel": "Solidarity / local %",
+        "secondaryDefault": 5,
+        "exemptBadge": "Withholding-light",
+        "taxNote": "Eurozone interest taxation varies by country. UCITS distributions usually face local withholding; bond ETFs may be more efficient than direct holdings depending on residence."
+      },
+      "parkCopy": {
+        "short": "Park EUR cash with daily-liquid ultrashort EUR bond ETFs.",
+        "medium": "Lock 6–12 months in EUR money-market UCITS.",
+        "long": "Eurozone government-bond ETFs — term premium with diversification.",
+        "ultra": "Long-duration eurozone govies — convexity to ECB cuts."
+      },
+      "curve": [
+        { "maturity": 0.083, "yield": 2.40, "prevYield": 2.45 },
+        { "maturity": 0.25,  "yield": 2.35, "prevYield": 2.40 },
+        { "maturity": 0.5,   "yield": 2.40, "prevYield": 2.46 },
+        { "maturity": 1,     "yield": 2.45, "prevYield": 2.51 },
+        { "maturity": 2,     "yield": 2.50, "prevYield": 2.57 },
+        { "maturity": 3,     "yield": 2.58, "prevYield": 2.65 },
+        { "maturity": 5,     "yield": 2.65, "prevYield": 2.72 },
+        { "maturity": 7,     "yield": 2.78, "prevYield": 2.85 },
+        { "maturity": 10,    "yield": 2.85, "prevYield": 2.92 },
+        { "maturity": 20,    "yield": 3.05, "prevYield": 3.12 },
+        { "maturity": 30,    "yield": 3.15, "prevYield": 3.22 }
+      ],
+      "rungs": [
+        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 2.40, "horizon": "<3mo",
+          "winner": { "name": "EUR ESTR-linked MMF", "issuer": "Lyxor / Amundi", "yield": 2.40, "coverage": "MMF", "lockup": "Daily liquid", "tax": "Per resident country", "vehicle": "MMF", "etoroTicker": "IS3M.DE", "etoroInstrumentId": 10565 } },
+        { "id": "3mo", "label": "3 months", "position": 1, "yield": 2.35, "horizon": "<3mo",
+          "winner": { "name": "EUR Ultrashort Bond ETF", "issuer": "iShares", "yield": 2.35, "coverage": "Sovereign", "lockup": "Daily (ETF wrapper)", "tax": "Per resident country", "vehicle": "ETF", "etoroTicker": "IS3M.DE", "etoroInstrumentId": 10565 } },
+        { "id": "6mo", "label": "6 months", "position": 2, "yield": 2.40, "horizon": "3-12mo",
+          "winner": { "name": "6m German Bubill", "issuer": "Bundesrepublik", "yield": 2.40, "coverage": "Sovereign", "lockup": "182 days", "tax": "Per resident country", "vehicle": "Bund", "etoroTicker": "IS3M.DE", "etoroInstrumentId": 10565 } },
+        { "id": "1y", "label": "1 year", "position": 3, "yield": 2.45, "horizon": "3-12mo",
+          "winner": { "name": "1y German Schatz", "issuer": "Bundesrepublik", "yield": 2.45, "coverage": "Sovereign", "lockup": "12 months", "tax": "Per resident country", "vehicle": "Bund", "etoroTicker": "IS3M.DE", "etoroInstrumentId": 10565 } },
+        { "id": "2y", "label": "2 years", "position": 4, "yield": 2.50, "horizon": "1-5y",
+          "winner": { "name": "2y Bund (Schatz)", "issuer": "Bundesrepublik", "yield": 2.50, "coverage": "Sovereign", "lockup": "2 years", "tax": "Per resident country", "vehicle": "Bund", "etoroTicker": "XY4P.DE", "etoroInstrumentId": 10614 } },
+        { "id": "5y", "label": "5 years", "position": 5, "yield": 2.65, "horizon": "1-5y",
+          "winner": { "name": "5y Bund (Bobl)", "issuer": "Bundesrepublik", "yield": 2.65, "coverage": "Sovereign", "lockup": "5 years", "tax": "Per resident country", "vehicle": "Bund", "etoroTicker": "XY4P.DE", "etoroInstrumentId": 10614 } },
+        { "id": "10y", "label": "10 years", "position": 6, "yield": 2.85, "horizon": "5y+",
+          "winner": { "name": "10y Bund", "issuer": "Bundesrepublik", "yield": 2.85, "coverage": "Sovereign", "lockup": "10 years", "tax": "Per resident country", "vehicle": "Bund", "etoroTicker": "XY4P.DE", "etoroInstrumentId": 10614 } }
+      ],
+      "comparator": [
+        { "vehicle": "Bubill (3 mo)",        "apy": 2.35, "lockup": "91 days",   "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "Bubill (6 mo)",        "apy": 2.40, "lockup": "182 days",  "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "Schatz (1 yr)",        "apy": 2.45, "lockup": "12 months", "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "Schatz (2 yr)",        "apy": 2.50, "lockup": "2 years",   "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "Bund (5 yr Bobl)",     "apy": 2.65, "lockup": "5 years",   "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "Bund (10 yr)",         "apy": 2.85, "lockup": "10 years",  "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Finanzagentur",        "issuerLink": "https://www.deutsche-finanzagentur.de", "secondaryTaxFree": true },
+        { "vehicle": "BTP (10 yr Italian)",  "apy": 3.55, "lockup": "10 years",  "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1,000", "issuer": "MEF",                  "issuerLink": "https://www.mef.gov.it", "secondaryTaxFree": false },
+        { "vehicle": "OAT (10 yr French)",   "apy": 3.20, "lockup": "10 years",  "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Agence France Trésor", "issuerLink": "https://www.aft.gouv.fr", "secondaryTaxFree": false },
+        { "vehicle": "EUR MMF (UCITS)",      "apy": 2.40, "lockup": "Daily",     "coverage": "MMF",         "taxes": "Per resident country", "minimum": "€1",     "issuer": "Lyxor / Amundi",       "secondaryTaxFree": false },
+        { "vehicle": "EUR Ultrashort ETF",   "apy": 2.35, "lockup": "Daily",     "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "iShares",              "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "EUR Linker (5 yr)",    "apy": 1.05, "lockup": "5 years",   "coverage": "Sovereign",   "taxes": "Per resident country", "minimum": "€1",     "issuer": "Eurozone sovereigns",  "secondaryTaxFree": true },
+        { "vehicle": "EUR savings (top)",    "apy": 2.20, "lockup": "Daily",     "coverage": "Deposit-EU",  "taxes": "Per resident country", "minimum": "€1",     "issuer": "Top EU banks",         "issuerLink": "https://www.eba.europa.eu", "secondaryTaxFree": false },
+        { "vehicle": "Term deposit (1 yr)",  "apy": 2.40, "lockup": "12 months", "coverage": "Deposit-EU",  "taxes": "Per resident country", "minimum": "€1,000", "issuer": "EU banks",             "secondaryTaxFree": false },
+        { "vehicle": "Term deposit (3 yr)",  "apy": 2.65, "lockup": "3 years",   "coverage": "Deposit-EU",  "taxes": "Per resident country", "minimum": "€1,000", "issuer": "EU banks",             "secondaryTaxFree": false },
+        { "vehicle": "BTP Valore (4 yr IT)", "apy": 3.10, "lockup": "4 years",   "coverage": "Sovereign",   "taxes": "Italy retail-friendly","minimum": "€1,000", "issuer": "MEF",                  "issuerLink": "https://www.mef.gov.it", "secondaryTaxFree": false }
+      ],
+      "history": [
+        { "date": "2021-05-03", "m3": -0.55, "y2": -0.66, "y10": -0.20, "policyRate": -0.50 },
+        { "date": "2021-08-02", "m3": -0.55, "y2": -0.75, "y10": -0.46, "policyRate": -0.50 },
+        { "date": "2021-11-01", "m3": -0.55, "y2": -0.66, "y10": -0.10, "policyRate": -0.50 },
+        { "date": "2022-02-01", "m3": -0.50, "y2": -0.40, "y10":  0.05, "policyRate": -0.50 },
+        { "date": "2022-05-02", "m3": -0.32, "y2":  0.30, "y10":  0.95, "policyRate": -0.50 },
+        { "date": "2022-08-01", "m3":  0.10, "y2":  0.40, "y10":  0.85, "policyRate":  0.00 },
+        { "date": "2022-11-01", "m3":  1.50, "y2":  1.95, "y10":  2.10, "policyRate":  1.50 },
+        { "date": "2023-02-01", "m3":  2.55, "y2":  2.65, "y10":  2.30, "policyRate":  2.50 },
+        { "date": "2023-05-01", "m3":  3.20, "y2":  2.65, "y10":  2.30, "policyRate":  3.00 },
+        { "date": "2023-08-01", "m3":  3.65, "y2":  3.05, "y10":  2.50, "policyRate":  3.75 },
+        { "date": "2023-11-01", "m3":  3.95, "y2":  2.85, "y10":  2.65, "policyRate":  4.00 },
+        { "date": "2024-02-01", "m3":  3.90, "y2":  2.55, "y10":  2.30, "policyRate":  4.00 },
+        { "date": "2024-05-01", "m3":  3.85, "y2":  2.95, "y10":  2.55, "policyRate":  4.00 },
+        { "date": "2024-08-01", "m3":  3.50, "y2":  2.40, "y10":  2.30, "policyRate":  3.75 },
+        { "date": "2024-11-01", "m3":  3.05, "y2":  2.20, "y10":  2.40, "policyRate":  3.25 },
+        { "date": "2025-02-01", "m3":  2.65, "y2":  2.10, "y10":  2.45, "policyRate":  2.75 },
+        { "date": "2025-05-01", "m3":  2.50, "y2":  2.05, "y10":  2.55, "policyRate":  2.50 },
+        { "date": "2025-08-01", "m3":  2.45, "y2":  2.20, "y10":  2.65, "policyRate":  2.50 },
+        { "date": "2025-11-01", "m3":  2.40, "y2":  2.40, "y10":  2.75, "policyRate":  2.40 },
+        { "date": "2026-02-01", "m3":  2.38, "y2":  2.45, "y10":  2.80, "policyRate":  2.40 },
+        { "date": "2026-05-01", "m3":  2.35, "y2":  2.50, "y10":  2.85, "policyRate":  2.40 }
+      ],
+      "sources": [
+        { "name": "ECB",          "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://www.ecb.europa.eu/stats" },
+        { "name": "Bundesbank",   "status": "live", "lastUpdate": "2026-05-03T16:00:00Z", "url": "https://www.bundesbank.de" },
+        { "name": "Finanzagentur","status": "live", "lastUpdate": "2026-05-02T12:00:00Z", "url": "https://www.deutsche-finanzagentur.de" }
+      ]
     },
-    {
-      "maturity": 0.5,
-      "yield": 3.71,
-      "prevYield": 3.72
+    "uk": {
+      "currency": "GBP",
+      "policyRate": 3.75,
+      "policyRateLabel": "BoE Bank Rate",
+      "cpiYoy": 2.5,
+      "cpiLabel": "CPI",
+      "taxModel": {
+        "primaryLabel": "Income tax %",
+        "primaryDefault": 40,
+        "secondaryLabel": null,
+        "secondaryDefault": 0,
+        "exemptBadge": "CGT-exempt",
+        "taxNote": "Gilts are exempt from UK Capital Gains Tax — the coupon is taxable as income, but capital appreciation is not. Worth ~25–45 bps depending on bracket and holding period."
+      },
+      "parkCopy": {
+        "short": "Park GBP cash with daily-liquid ultrashort sterling bond ETFs.",
+        "medium": "Lock 6–12 months in sterling money-market funds or short gilts.",
+        "long": "UK gilts — term premium plus CGT exemption.",
+        "ultra": "Long gilts — high convexity to BoE cuts."
+      },
+      "curve": [
+        { "maturity": 0.083, "yield": 3.75, "prevYield": 3.80 },
+        { "maturity": 0.25,  "yield": 3.65, "prevYield": 3.71 },
+        { "maturity": 0.5,   "yield": 3.70, "prevYield": 3.76 },
+        { "maturity": 1,     "yield": 3.80, "prevYield": 3.86 },
+        { "maturity": 2,     "yield": 3.85, "prevYield": 3.92 },
+        { "maturity": 3,     "yield": 3.95, "prevYield": 4.02 },
+        { "maturity": 5,     "yield": 4.05, "prevYield": 4.12 },
+        { "maturity": 7,     "yield": 4.15, "prevYield": 4.22 },
+        { "maturity": 10,    "yield": 4.30, "prevYield": 4.37 },
+        { "maturity": 20,    "yield": 4.55, "prevYield": 4.62 },
+        { "maturity": 30,    "yield": 4.75, "prevYield": 4.82 }
+      ],
+      "rungs": [
+        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 3.75, "horizon": "<3mo",
+          "winner": { "name": "GBP MMF (SONIA-linked)", "issuer": "Royal London / BlackRock", "yield": 3.70, "coverage": "MMF", "lockup": "Daily liquid", "tax": "Income tax", "vehicle": "MMF", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
+        { "id": "3mo", "label": "3 months", "position": 1, "yield": 3.65, "horizon": "<3mo",
+          "winner": { "name": "GBP Ultrashort Bond ETF", "issuer": "iShares", "yield": 3.65, "coverage": "Sovereign", "lockup": "Daily (ETF)", "tax": "Income tax", "vehicle": "ETF", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
+        { "id": "6mo", "label": "6 months", "position": 2, "yield": 3.70, "horizon": "3-12mo",
+          "winner": { "name": "6m UK T-bill", "issuer": "UK DMO", "yield": 3.70, "coverage": "Sovereign", "lockup": "182 days", "tax": "Income tax", "vehicle": "Gilt", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
+        { "id": "1y", "label": "1 year", "position": 3, "yield": 3.80, "horizon": "3-12mo",
+          "winner": { "name": "1y UK T-bill", "issuer": "UK DMO", "yield": 3.80, "coverage": "Sovereign", "lockup": "12 months", "tax": "Income tax", "vehicle": "Gilt", "etoroTicker": "ERNS.L", "etoroInstrumentId": 14495 } },
+        { "id": "2y", "label": "2 years", "position": 4, "yield": 3.85, "horizon": "1-5y",
+          "winner": { "name": "2y Gilt (CGT-exempt)", "issuer": "UK DMO", "yield": 3.85, "coverage": "Sovereign", "lockup": "2 years", "tax": "CGT-exempt, income taxable", "vehicle": "Gilt", "etoroTicker": "SYBG.DE", "etoroInstrumentId": 10641 } },
+        { "id": "5y", "label": "5 years", "position": 5, "yield": 4.05, "horizon": "1-5y",
+          "winner": { "name": "5y Gilt", "issuer": "UK DMO", "yield": 4.05, "coverage": "Sovereign", "lockup": "5 years", "tax": "CGT-exempt, income taxable", "vehicle": "Gilt", "etoroTicker": "SYBG.DE", "etoroInstrumentId": 10641 } },
+        { "id": "10y", "label": "10 years", "position": 6, "yield": 4.30, "horizon": "5y+",
+          "winner": { "name": "10y Gilt", "issuer": "UK DMO", "yield": 4.30, "coverage": "Sovereign", "lockup": "10 years", "tax": "CGT-exempt, income taxable", "vehicle": "Gilt", "etoroTicker": "SYBG.DE", "etoroInstrumentId": 10641 } }
+      ],
+      "comparator": [
+        { "vehicle": "UK T-bill (3 mo)",     "apy": 3.65, "lockup": "91 days",   "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "UK T-bill (6 mo)",     "apy": 3.70, "lockup": "182 days",  "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "Gilt (1 yr)",          "apy": 3.80, "lockup": "12 months", "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "Gilt (2 yr)",          "apy": 3.85, "lockup": "2 years",   "coverage": "Sovereign",  "taxes": "Income; CGT-exempt","minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "Gilt (5 yr)",          "apy": 4.05, "lockup": "5 years",   "coverage": "Sovereign",  "taxes": "Income; CGT-exempt","minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "Gilt (10 yr)",         "apy": 4.30, "lockup": "10 years",  "coverage": "Sovereign",  "taxes": "Income; CGT-exempt","minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "Index-linked Gilt 5y", "apy": 1.40, "lockup": "5 years",   "coverage": "Sovereign",  "taxes": "Income; CGT-exempt","minimum": "£100",   "issuer": "UK DMO",                "issuerLink": "https://www.dmo.gov.uk", "secondaryTaxFree": true },
+        { "vehicle": "NS&I Direct Saver",    "apy": 3.30, "lockup": "Daily",     "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£1",     "issuer": "NS&I",                  "issuerLink": "https://www.nsandi.com", "secondaryTaxFree": false },
+        { "vehicle": "NS&I Income Bonds",    "apy": 3.40, "lockup": "Daily",     "coverage": "Sovereign",  "taxes": "Income tax",        "minimum": "£500",   "issuer": "NS&I",                  "issuerLink": "https://www.nsandi.com", "secondaryTaxFree": false },
+        { "vehicle": "NS&I Premium Bonds",   "apy": 3.10, "lockup": "Daily",     "coverage": "Sovereign",  "taxes": "Tax-free prizes",   "minimum": "£25",    "issuer": "NS&I",                  "issuerLink": "https://www.nsandi.com/premium-bonds", "secondaryTaxFree": true },
+        { "vehicle": "Cash ISA",             "apy": 4.50, "lockup": "Daily",     "coverage": "FSCS",       "taxes": "ISA tax-free",      "minimum": "£1",     "issuer": "Top UK banks",          "secondaryTaxFree": true },
+        { "vehicle": "Easy-access savings",  "apy": 4.20, "lockup": "Daily",     "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1",     "issuer": "Top UK banks",          "issuerLink": "https://www.fscs.org.uk", "secondaryTaxFree": false },
+        { "vehicle": "Fixed-rate bond 1y",   "apy": 4.40, "lockup": "12 months", "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1,000", "issuer": "Various banks",         "secondaryTaxFree": false },
+        { "vehicle": "Fixed-rate bond 3y",   "apy": 4.50, "lockup": "3 years",   "coverage": "FSCS",       "taxes": "Income tax",        "minimum": "£1,000", "issuer": "Various banks",         "secondaryTaxFree": false },
+        { "vehicle": "GBP MMF (UCITS)",      "apy": 3.70, "lockup": "Daily",     "coverage": "MMF",        "taxes": "Income tax",        "minimum": "£1",     "issuer": "BlackRock / Royal London","secondaryTaxFree": false }
+      ],
+      "history": [
+        { "date": "2021-05-03", "m3": 0.05, "y2": 0.10, "y10": 0.85, "policyRate": 0.10 },
+        { "date": "2021-08-02", "m3": 0.05, "y2": 0.18, "y10": 0.55, "policyRate": 0.10 },
+        { "date": "2021-11-01", "m3": 0.10, "y2": 0.62, "y10": 1.05, "policyRate": 0.10 },
+        { "date": "2022-02-01", "m3": 0.45, "y2": 1.20, "y10": 1.30, "policyRate": 0.50 },
+        { "date": "2022-05-02", "m3": 1.05, "y2": 1.62, "y10": 1.95, "policyRate": 1.00 },
+        { "date": "2022-08-01", "m3": 1.85, "y2": 1.85, "y10": 1.85, "policyRate": 1.75 },
+        { "date": "2022-11-01", "m3": 3.20, "y2": 3.30, "y10": 3.45, "policyRate": 3.00 },
+        { "date": "2023-02-01", "m3": 3.95, "y2": 3.65, "y10": 3.30, "policyRate": 4.00 },
+        { "date": "2023-05-01", "m3": 4.45, "y2": 3.80, "y10": 3.80, "policyRate": 4.50 },
+        { "date": "2023-08-01", "m3": 5.30, "y2": 4.95, "y10": 4.40, "policyRate": 5.25 },
+        { "date": "2023-11-01", "m3": 5.30, "y2": 4.55, "y10": 4.20, "policyRate": 5.25 },
+        { "date": "2024-02-01", "m3": 5.30, "y2": 4.55, "y10": 4.05, "policyRate": 5.25 },
+        { "date": "2024-05-01", "m3": 5.25, "y2": 4.40, "y10": 4.30, "policyRate": 5.25 },
+        { "date": "2024-08-01", "m3": 5.05, "y2": 4.10, "y10": 4.00, "policyRate": 5.00 },
+        { "date": "2024-11-01", "m3": 4.65, "y2": 4.40, "y10": 4.45, "policyRate": 4.75 },
+        { "date": "2025-02-01", "m3": 4.40, "y2": 4.30, "y10": 4.55, "policyRate": 4.50 },
+        { "date": "2025-05-01", "m3": 4.20, "y2": 4.10, "y10": 4.50, "policyRate": 4.25 },
+        { "date": "2025-08-01", "m3": 4.05, "y2": 4.00, "y10": 4.40, "policyRate": 4.00 },
+        { "date": "2025-11-01", "m3": 3.85, "y2": 3.95, "y10": 4.35, "policyRate": 4.00 },
+        { "date": "2026-02-01", "m3": 3.70, "y2": 3.85, "y10": 4.32, "policyRate": 3.75 },
+        { "date": "2026-05-01", "m3": 3.65, "y2": 3.85, "y10": 4.30, "policyRate": 3.75 }
+      ],
+      "sources": [
+        { "name": "BoE",         "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://www.bankofengland.co.uk/statistics" },
+        { "name": "UK DMO",      "status": "live", "lastUpdate": "2026-05-03T16:00:00Z", "url": "https://www.dmo.gov.uk" },
+        { "name": "FCA / FSCS",  "status": "live", "lastUpdate": "2026-05-02T12:00:00Z", "url": "https://www.fscs.org.uk" }
+      ]
     },
-    {
-      "maturity": 1,
-      "yield": 3.72,
-      "prevYield": 3.7
-    },
-    {
-      "maturity": 2,
-      "yield": 3.88,
-      "prevYield": 3.83
-    },
-    {
-      "maturity": 3,
-      "yield": 3.91,
-      "prevYield": 3.91
-    },
-    {
-      "maturity": 5,
-      "yield": 4.02,
-      "prevYield": 3.96
-    },
-    {
-      "maturity": 7,
-      "yield": 4.2,
-      "prevYield": 4.2
-    },
-    {
-      "maturity": 10,
-      "yield": 4.4,
-      "prevYield": 4.34
-    },
-    {
-      "maturity": 20,
-      "yield": 4.97,
-      "prevYield": 4.97
-    },
-    {
-      "maturity": 30,
-      "yield": 4.98,
-      "prevYield": 4.98
+    "global": {
+      "currency": "Mixed",
+      "policyRate": 3.20,
+      "policyRateLabel": "G7 weighted",
+      "cpiYoy": 2.7,
+      "cpiLabel": "Global CPI",
+      "taxModel": {
+        "primaryLabel": "Effective tax %",
+        "primaryDefault": 30,
+        "secondaryLabel": null,
+        "secondaryDefault": 0,
+        "exemptBadge": "Sovereign",
+        "taxNote": "Multi-currency baskets: tax outcomes depend on the jurisdiction where the wrapper is held. UCITS ETFs domiciled in Ireland/Luxembourg are typically the most tax-efficient for non-US/non-UK investors."
+      },
+      "parkCopy": {
+        "short": "Diversified multi-currency cash basket — USD T-bills, EUR + GBP ultrashorts.",
+        "medium": "Global short-bond mix with an inflation-protection sleeve.",
+        "long": "Global investment-grade aggregate — broad currency + credit diversification.",
+        "ultra": "Global haven complex — long Treasuries, global agg, linkers."
+      },
+      "curve": [
+        { "maturity": 0.083, "yield": 3.20, "prevYield": 3.25 },
+        { "maturity": 0.25,  "yield": 3.18, "prevYield": 3.23 },
+        { "maturity": 0.5,   "yield": 3.22, "prevYield": 3.28 },
+        { "maturity": 1,     "yield": 3.30, "prevYield": 3.37 },
+        { "maturity": 2,     "yield": 3.40, "prevYield": 3.47 },
+        { "maturity": 3,     "yield": 3.50, "prevYield": 3.57 },
+        { "maturity": 5,     "yield": 3.60, "prevYield": 3.67 },
+        { "maturity": 7,     "yield": 3.72, "prevYield": 3.79 },
+        { "maturity": 10,    "yield": 3.85, "prevYield": 3.92 },
+        { "maturity": 20,    "yield": 4.10, "prevYield": 4.17 },
+        { "maturity": 30,    "yield": 4.15, "prevYield": 4.22 }
+      ],
+      "rungs": [
+        { "id": "overnight", "label": "Overnight", "position": 0, "yield": 3.20, "horizon": "<3mo",
+          "winner": { "name": "Multi-currency MMF mix", "issuer": "Various", "yield": 3.20, "coverage": "MMF", "lockup": "Daily liquid", "tax": "Per UCITS jurisdiction", "vehicle": "MMF", "etoroTicker": "IB01.L", "etoroInstrumentId": 1442 } },
+        { "id": "3mo", "label": "3 months", "position": 1, "yield": 3.18, "horizon": "<3mo",
+          "winner": { "name": "USD T-bill UCITS (0–1y)", "issuer": "iShares", "yield": 3.18, "coverage": "Treasury", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "IB01.L", "etoroInstrumentId": 1442 } },
+        { "id": "6mo", "label": "6 months", "position": 2, "yield": 3.22, "horizon": "3-12mo",
+          "winner": { "name": "USD T-bill 0–1y UCITS", "issuer": "iShares", "yield": 3.22, "coverage": "Treasury", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "IB01.L", "etoroInstrumentId": 1442 } },
+        { "id": "1y", "label": "1 year", "position": 3, "yield": 3.30, "horizon": "3-12mo",
+          "winner": { "name": "USD T-bill 0–1y UCITS", "issuer": "iShares", "yield": 3.30, "coverage": "Treasury", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "IB01.L", "etoroInstrumentId": 1442 } },
+        { "id": "2y", "label": "2 years", "position": 4, "yield": 3.40, "horizon": "1-5y",
+          "winner": { "name": "Global Aggregate Bond UCITS", "issuer": "iShares", "yield": 3.40, "coverage": "Sovereign", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "AGGU.L", "etoroInstrumentId": 13553 } },
+        { "id": "5y", "label": "5 years", "position": 5, "yield": 3.60, "horizon": "1-5y",
+          "winner": { "name": "Global Aggregate Bond UCITS", "issuer": "iShares", "yield": 3.60, "coverage": "Sovereign", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "AGGU.L", "etoroInstrumentId": 13553 } },
+        { "id": "10y", "label": "10 years", "position": 6, "yield": 3.85, "horizon": "5y+",
+          "winner": { "name": "USD Treasury 20+yr UCITS", "issuer": "iShares", "yield": 3.85, "coverage": "Treasury", "lockup": "Daily (ETF)", "tax": "UCITS-efficient", "vehicle": "ETF", "etoroTicker": "DTLA.L", "etoroInstrumentId": 13564 } }
+      ],
+      "comparator": [
+        { "vehicle": "USD T-bill 0-1y (IB01)",     "apy": 3.20, "lockup": "Daily", "coverage": "Treasury",  "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "EUR Ultrashort (IS3M)",      "apy": 2.35, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "GBP Ultrashort (ERNS)",      "apy": 3.65, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "Global Agg (AGGU)",          "apy": 3.40, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "Global Agg EUR-hedged (EUNA)","apy": 2.85, "lockup": "Daily","coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "USD Treasury 20+y (DTLA)",   "apy": 3.85, "lockup": "Daily", "coverage": "Treasury",  "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "Eurozone Govies (XY4P)",     "apy": 2.65, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "Xtrackers",    "issuerLink": "https://etf.dws.com", "secondaryTaxFree": true },
+        { "vehicle": "EUR Linker (IBCI)",          "apy": 1.05, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "UK Gilt (SYBG)",             "apy": 4.10, "lockup": "Daily", "coverage": "Sovereign", "taxes": "UCITS",  "minimum": "1 share",  "issuer": "SPDR",         "issuerLink": "https://www.ssga.com",   "secondaryTaxFree": true },
+        { "vehicle": "USD MMF Treasury",           "apy": 3.20, "lockup": "Daily", "coverage": "MMF",       "taxes": "UCITS",  "minimum": "1 share",  "issuer": "Various",      "secondaryTaxFree": false },
+        { "vehicle": "EUR MMF (UCITS)",            "apy": 2.40, "lockup": "Daily", "coverage": "MMF",       "taxes": "UCITS",  "minimum": "1 share",  "issuer": "Various",      "secondaryTaxFree": false },
+        { "vehicle": "Gold ETF (IGLN)",            "apy": 0.00, "lockup": "Daily", "coverage": "None",      "taxes": "UCITS",  "minimum": "1 share",  "issuer": "iShares",      "issuerLink": "https://www.ishares.com", "secondaryTaxFree": true },
+        { "vehicle": "Swiss CHF deposit",          "apy": 0.85, "lockup": "Daily", "coverage": "Sovereign", "taxes": "Per residence", "minimum": "1 CHF","issuer": "Top CH banks", "secondaryTaxFree": false },
+        { "vehicle": "JPY deposit (top tier)",     "apy": 0.50, "lockup": "Daily", "coverage": "Sovereign", "taxes": "Per residence", "minimum": "¥1",   "issuer": "Top JP banks", "secondaryTaxFree": false },
+        { "vehicle": "Singapore T-bill 6m",        "apy": 3.10, "lockup": "182 days","coverage": "Sovereign","taxes": "Per residence","minimum": "S$1,000","issuer": "MAS",        "issuerLink": "https://www.mas.gov.sg", "secondaryTaxFree": true }
+      ],
+      "history": [
+        { "date": "2021-05-03", "m3": 0.05, "y2": 0.20, "y10": 1.40, "policyRate": 0.50 },
+        { "date": "2021-08-02", "m3": 0.10, "y2": 0.30, "y10": 1.20, "policyRate": 0.55 },
+        { "date": "2021-11-01", "m3": 0.20, "y2": 0.55, "y10": 1.55, "policyRate": 0.60 },
+        { "date": "2022-02-01", "m3": 0.40, "y2": 1.10, "y10": 1.85, "policyRate": 0.85 },
+        { "date": "2022-05-02", "m3": 0.95, "y2": 2.15, "y10": 2.55, "policyRate": 1.40 },
+        { "date": "2022-08-01", "m3": 1.95, "y2": 2.40, "y10": 2.40, "policyRate": 2.10 },
+        { "date": "2022-11-01", "m3": 3.40, "y2": 3.65, "y10": 3.55, "policyRate": 3.30 },
+        { "date": "2023-02-01", "m3": 4.05, "y2": 3.65, "y10": 3.20, "policyRate": 4.10 },
+        { "date": "2023-05-01", "m3": 4.50, "y2": 3.80, "y10": 3.40, "policyRate": 4.55 },
+        { "date": "2023-08-01", "m3": 4.95, "y2": 4.40, "y10": 3.85, "policyRate": 4.95 },
+        { "date": "2023-11-01", "m3": 5.05, "y2": 4.40, "y10": 4.20, "policyRate": 5.05 },
+        { "date": "2024-02-01", "m3": 5.05, "y2": 4.10, "y10": 3.85, "policyRate": 5.05 },
+        { "date": "2024-05-01", "m3": 5.00, "y2": 4.50, "y10": 4.20, "policyRate": 5.00 },
+        { "date": "2024-08-01", "m3": 4.75, "y2": 3.90, "y10": 3.95, "policyRate": 4.85 },
+        { "date": "2024-11-01", "m3": 4.20, "y2": 3.90, "y10": 4.05, "policyRate": 4.40 },
+        { "date": "2025-02-01", "m3": 3.85, "y2": 3.80, "y10": 4.20, "policyRate": 4.05 },
+        { "date": "2025-05-01", "m3": 3.55, "y2": 3.55, "y10": 4.05, "policyRate": 3.75 },
+        { "date": "2025-08-01", "m3": 3.40, "y2": 3.45, "y10": 3.95, "policyRate": 3.55 },
+        { "date": "2025-11-01", "m3": 3.25, "y2": 3.40, "y10": 3.95, "policyRate": 3.40 },
+        { "date": "2026-02-01", "m3": 3.20, "y2": 3.40, "y10": 3.90, "policyRate": 3.25 },
+        { "date": "2026-05-01", "m3": 3.18, "y2": 3.40, "y10": 3.85, "policyRate": 3.20 }
+      ],
+      "sources": [
+        { "name": "FRED",        "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://fred.stlouisfed.org" },
+        { "name": "ECB",         "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://www.ecb.europa.eu/stats" },
+        { "name": "BoE",         "status": "live", "lastUpdate": "2026-05-04T08:00:00Z", "url": "https://www.bankofengland.co.uk" }
+      ]
     }
-  ],
-  "rungs": [
-    {
-      "id": "overnight",
-      "label": "Overnight",
-      "position": 0,
-      "yield": 3.5900000000000003,
-      "horizon": "<3mo",
-      "winner": {
-        "name": "Treasury MMF (VUSXX)",
-        "issuer": "Vanguard",
-        "yield": 3.59,
-        "coverage": "MMF",
-        "lockup": "Daily liquid",
-        "tax": "State-tax-free (Treasury)",
-        "vehicle": "MMF",
-        "etoroTicker": "BIL",
-        "etoroInstrumentId": 4407
-      }
-    },
-    {
-      "id": "3mo",
-      "label": "3 months",
-      "position": 1,
-      "yield": 3.68,
-      "horizon": "<3mo",
-      "winner": {
-        "name": "13-week T-bill",
-        "issuer": "U.S. Treasury",
-        "yield": 3.68,
-        "coverage": "Treasury",
-        "lockup": "91 days",
-        "tax": "State-tax-free",
-        "vehicle": "T-bill",
-        "etoroTicker": "BIL",
-        "etoroInstrumentId": 4407
-      }
-    },
-    {
-      "id": "6mo",
-      "label": "6 months",
-      "position": 2,
-      "yield": 3.71,
-      "horizon": "3-12mo",
-      "winner": {
-        "name": "26-week T-bill",
-        "issuer": "U.S. Treasury",
-        "yield": 3.71,
-        "coverage": "Treasury",
-        "lockup": "182 days",
-        "tax": "State-tax-free",
-        "vehicle": "T-bill",
-        "etoroTicker": "SHV",
-        "etoroInstrumentId": 4321
-      }
-    },
-    {
-      "id": "1y",
-      "label": "1 year",
-      "position": 3,
-      "yield": 3.72,
-      "horizon": "3-12mo",
-      "winner": {
-        "name": "52-week T-bill",
-        "issuer": "U.S. Treasury",
-        "yield": 3.72,
-        "coverage": "Treasury",
-        "lockup": "364 days",
-        "tax": "State-tax-free",
-        "vehicle": "T-bill",
-        "etoroTicker": "SHV",
-        "etoroInstrumentId": 4321
-      }
-    },
-    {
-      "id": "2y",
-      "label": "2 years",
-      "position": 4,
-      "yield": 3.88,
-      "horizon": "1-5y",
-      "winner": {
-        "name": "2-year Treasury Note",
-        "issuer": "U.S. Treasury",
-        "yield": 3.88,
-        "coverage": "Treasury",
-        "lockup": "2 years",
-        "tax": "State-tax-free",
-        "vehicle": "Note",
-        "etoroTicker": "SHV",
-        "etoroInstrumentId": 4321
-      }
-    },
-    {
-      "id": "5y",
-      "label": "5 years",
-      "position": 5,
-      "yield": 4.02,
-      "horizon": "1-5y",
-      "winner": {
-        "name": "5-year Treasury Note",
-        "issuer": "U.S. Treasury",
-        "yield": 4.02,
-        "coverage": "Treasury",
-        "lockup": "5 years",
-        "tax": "State-tax-free",
-        "vehicle": "Note",
-        "etoroTicker": "IEF",
-        "etoroInstrumentId": 3101
-      }
-    },
-    {
-      "id": "10y",
-      "label": "10 years",
-      "position": 6,
-      "yield": 4.4,
-      "horizon": "5y+",
-      "winner": {
-        "name": "10-year Treasury Note",
-        "issuer": "U.S. Treasury",
-        "yield": 4.4,
-        "coverage": "Treasury",
-        "lockup": "10 years",
-        "tax": "State-tax-free",
-        "vehicle": "Note",
-        "etoroTicker": "IEF",
-        "etoroInstrumentId": 3101
-      }
-    }
-  ],
-  "comparator": [
-    {
-      "vehicle": "T-bill (4 wk)",
-      "apy": 3.48,
-      "lockup": "28 days",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-bill (3 mo)",
-      "apy": 3.5,
-      "lockup": "91 days",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-bill (6 mo)",
-      "apy": 3.55,
-      "lockup": "182 days",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-Note (1 yr)",
-      "apy": 3.62,
-      "lockup": "364 days",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-Note (2 yr)",
-      "apy": 3.85,
-      "lockup": "2 years",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-Note (5 yr)",
-      "apy": 4.1,
-      "lockup": "5 years",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "T-Note (10 yr)",
-      "apy": 4.4,
-      "lockup": "10 years",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "TIPS (5 yr)",
-      "apy": 1.85,
-      "lockup": "5 years",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free, real",
-      "minimum": "$100",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "HYSA",
-      "apy": 3.75,
-      "lockup": "Daily",
-      "coverage": "FDIC",
-      "taxes": "Federal + state",
-      "minimum": "$0",
-      "issuer": "Top tier banks",
-      "issuerLink": "https://www.fdic.gov/resources/bankers/national-rates",
-      "stateTaxFree": false
-    },
-    {
-      "vehicle": "MMF (Treasury)",
-      "apy": 3.55,
-      "lockup": "Daily",
-      "coverage": "MMF",
-      "taxes": "State-tax-free",
-      "minimum": "$1",
-      "issuer": "Vanguard / Fidelity / Schwab",
-      "stateTaxFree": true
-    },
-    {
-      "vehicle": "MMF (Prime)",
-      "apy": 3.78,
-      "lockup": "Daily",
-      "coverage": "MMF",
-      "taxes": "Federal + state",
-      "minimum": "$1",
-      "issuer": "Vanguard / Fidelity / Schwab",
-      "stateTaxFree": false
-    },
-    {
-      "vehicle": "Brokered CD (3 mo)",
-      "apy": 3.55,
-      "lockup": "3 months",
-      "coverage": "FDIC",
-      "taxes": "Federal + state",
-      "minimum": "$1,000",
-      "issuer": "Various banks",
-      "issuerLink": "https://www.fdic.gov",
-      "stateTaxFree": false
-    },
-    {
-      "vehicle": "Brokered CD (1 yr)",
-      "apy": 3.85,
-      "lockup": "12 months",
-      "coverage": "FDIC",
-      "taxes": "Federal + state",
-      "minimum": "$1,000",
-      "issuer": "Various banks",
-      "issuerLink": "https://www.fdic.gov",
-      "stateTaxFree": false
-    },
-    {
-      "vehicle": "Brokered CD (5 yr)",
-      "apy": 4.2,
-      "lockup": "5 years",
-      "coverage": "FDIC",
-      "taxes": "Federal + state",
-      "minimum": "$1,000",
-      "issuer": "Various banks",
-      "issuerLink": "https://www.fdic.gov",
-      "stateTaxFree": false
-    },
-    {
-      "vehicle": "I Bond",
-      "apy": 3.1,
-      "lockup": "12 months min, 5y to avoid penalty",
-      "coverage": "Treasury",
-      "taxes": "State-tax-free, federal-deferrable",
-      "minimum": "$25",
-      "issuer": "U.S. Treasury",
-      "issuerLink": "https://treasurydirect.gov/savings-bonds/i-bonds/",
-      "stateTaxFree": true
-    }
-  ],
-  "history": [
-    {
-      "date": "2021-05-03",
-      "m3": 0.02,
-      "y2": 0.16,
-      "y10": 1.62,
-      "fedFunds": 0.06
-    },
-    {
-      "date": "2021-08-02",
-      "m3": 0.05,
-      "y2": 0.18,
-      "y10": 1.18,
-      "fedFunds": 0.1
-    },
-    {
-      "date": "2021-11-01",
-      "m3": 0.05,
-      "y2": 0.45,
-      "y10": 1.55,
-      "fedFunds": 0.08
-    },
-    {
-      "date": "2022-02-01",
-      "m3": 0.21,
-      "y2": 1.18,
-      "y10": 1.79,
-      "fedFunds": 0.08
-    },
-    {
-      "date": "2022-05-02",
-      "m3": 0.85,
-      "y2": 2.72,
-      "y10": 2.99,
-      "fedFunds": 0.33
-    },
-    {
-      "date": "2022-08-01",
-      "m3": 2.41,
-      "y2": 2.91,
-      "y10": 2.6,
-      "fedFunds": 2.33
-    },
-    {
-      "date": "2022-11-01",
-      "m3": 4.2,
-      "y2": 4.55,
-      "y10": 4.05,
-      "fedFunds": 3.83
-    },
-    {
-      "date": "2023-02-01",
-      "m3": 4.62,
-      "y2": 4.2,
-      "y10": 3.4,
-      "fedFunds": 4.57
-    },
-    {
-      "date": "2023-05-01",
-      "m3": 5.2,
-      "y2": 4.05,
-      "y10": 3.42,
-      "fedFunds": 5.08
-    },
-    {
-      "date": "2023-08-01",
-      "m3": 5.42,
-      "y2": 4.9,
-      "y10": 4.05,
-      "fedFunds": 5.33
-    },
-    {
-      "date": "2023-11-01",
-      "m3": 5.45,
-      "y2": 5.05,
-      "y10": 4.95,
-      "fedFunds": 5.33
-    },
-    {
-      "date": "2024-02-01",
-      "m3": 5.4,
-      "y2": 4.36,
-      "y10": 4.04,
-      "fedFunds": 5.33
-    },
-    {
-      "date": "2024-05-01",
-      "m3": 5.42,
-      "y2": 5.04,
-      "y10": 4.68,
-      "fedFunds": 5.33
-    },
-    {
-      "date": "2024-08-01",
-      "m3": 5.2,
-      "y2": 4.16,
-      "y10": 3.97,
-      "fedFunds": 5.33
-    },
-    {
-      "date": "2024-11-01",
-      "m3": 4.55,
-      "y2": 4.2,
-      "y10": 4.36,
-      "fedFunds": 4.83
-    },
-    {
-      "date": "2025-02-01",
-      "m3": 4.2,
-      "y2": 4.2,
-      "y10": 4.55,
-      "fedFunds": 4.33
-    },
-    {
-      "date": "2025-05-01",
-      "m3": 4.1,
-      "y2": 3.95,
-      "y10": 4.4,
-      "fedFunds": 4.33
-    },
-    {
-      "date": "2025-08-01",
-      "m3": 3.95,
-      "y2": 3.85,
-      "y10": 4.3,
-      "fedFunds": 4.08
-    },
-    {
-      "date": "2025-11-01",
-      "m3": 3.7,
-      "y2": 3.8,
-      "y10": 4.35,
-      "fedFunds": 3.83
-    },
-    {
-      "date": "2026-02-01",
-      "m3": 3.55,
-      "y2": 3.85,
-      "y10": 4.42,
-      "fedFunds": 3.58
-    },
-    {
-      "date": "2026-05-01",
-      "m3": 3.5,
-      "y2": 3.85,
-      "y10": 4.4,
-      "fedFunds": 3.5
-    },
-    {
-      "date": "2026-05-04",
-      "m3": 3.68,
-      "y2": 3.88,
-      "y10": 4.4,
-      "fedFunds": 3.64
-    }
-  ],
-  "sources": [
-    {
-      "name": "FRED",
-      "status": "live",
-      "lastUpdate": "2026-05-04T09:12:42.472Z",
-      "url": "https://fred.stlouisfed.org"
-    },
-    {
-      "name": "TreasuryDirect",
-      "status": "live",
-      "lastUpdate": "2026-05-04T09:12:42.472Z",
-      "url": "https://treasurydirect.gov"
-    },
-    {
-      "name": "FDIC",
-      "status": "live",
-      "lastUpdate": "2026-05-04T09:12:42.472Z",
-      "url": "https://www.fdic.gov"
-    }
-  ]
+  }
 }

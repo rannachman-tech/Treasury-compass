@@ -15,9 +15,10 @@ import type { HistoryPoint } from "@/lib/types";
 
 interface Props {
   history: HistoryPoint[];
+  policyRateLabel: string;
 }
 
-export function DeepHistoryChart({ history }: Props) {
+export function DeepHistoryChart({ history, policyRateLabel }: Props) {
   return (
     <section className="rounded-lg border border-border bg-surface paper p-4 sm:p-5">
       <div className="flex items-center justify-between">
@@ -26,7 +27,7 @@ export function DeepHistoryChart({ history }: Props) {
             5-year history
           </h3>
           <p className="mt-0.5 text-[13px] text-fg">
-            Effective Fed Funds, 3-month, 2-year, 10-year
+            {policyRateLabel}, 3-month, 2-year, 10-year
           </p>
         </div>
       </div>
@@ -53,14 +54,13 @@ export function DeepHistoryChart({ history }: Props) {
               tick={{ fill: "rgb(var(--fg-subtle))", fontSize: 10, fontFamily: "ui-monospace" }}
               tickLine={false}
               axisLine={false}
-              width={36}
-              domain={[0, "auto"]}
+              width={42}
             />
             <Tooltip
               content={({ active, payload, label }) => {
                 if (!active || !payload?.length) return null;
                 const map: Record<string, string> = {
-                  fedFunds: "Fed Funds",
+                  policyRate: policyRateLabel,
                   m3: "3-month",
                   y2: "2-year",
                   y10: "10-year",
@@ -87,7 +87,7 @@ export function DeepHistoryChart({ history }: Props) {
               wrapperStyle={{ fontSize: 11, fontFamily: "ui-monospace", color: "rgb(var(--fg-subtle))" }}
               formatter={(v: string) => {
                 const map: Record<string, string> = {
-                  fedFunds: "Fed Funds",
+                  policyRate: policyRateLabel,
                   m3: "3m",
                   y2: "2y",
                   y10: "10y",
@@ -97,13 +97,13 @@ export function DeepHistoryChart({ history }: Props) {
             />
             <Area
               type="monotone"
-              dataKey="fedFunds"
+              dataKey="policyRate"
               stroke="rgb(var(--accent))"
               strokeWidth={1.5}
               fill="url(#ff)"
               isAnimationActive={false}
             />
-            <Line type="monotone" dataKey="m3" stroke="rgb(var(--positive))" strokeWidth={1.25} dot={false} isAnimationActive={false} />
+            <Line type="monotone" dataKey="m3"  stroke="rgb(var(--positive))" strokeWidth={1.25} dot={false} isAnimationActive={false} />
             <Line type="monotone" dataKey="y2"  stroke="rgb(var(--warn))"     strokeWidth={1.25} dot={false} isAnimationActive={false} />
             <Line type="monotone" dataKey="y10" stroke="rgb(var(--danger))"   strokeWidth={1.25} dot={false} isAnimationActive={false} />
           </AreaChart>

@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { ComparatorRow, Horizon } from "@/lib/types";
+import { useEffect, useMemo, useState } from "react";
+import type { ComparatorRow, Horizon, RegionData } from "@/lib/types";
 import { Calculator as CalcIcon, Info } from "lucide-react";
 
 interface Props {
   rows: ComparatorRow[];
   defaultHorizon: Horizon;
-  cpiYoy: number;
+  regionData: RegionData;
 }
 
 const HORIZON_TO_YEARS: Record<Horizon, number> = {
@@ -28,23 +28,44 @@ const matchHorizon = (lockup: string, h: Horizon): boolean => {
   const l = lockup.toLowerCase();
   switch (h) {
     case "<3mo":
-      return l.includes("daily") || /28|91|3 month/.test(l);
+      return l.includes("daily") || /28|91|3 month|^[1-3] month/.test(l);
     case "3-12mo":
-      return /182|364|6 month|12 month|3 month/.test(l);
+      return /182|364|6 month|12 month/.test(l) || /^1 year|^1 yr/.test(l);
     case "1-5y":
-      return /^[1-5] /.test(l) || l.includes("12 month");
+      return /^[1-5] /.test(l) || /^[1-5] year/.test(l);
     case "5y+":
-      return /^([5-9]|10) /.test(l);
+      return /^([5-9]|10|1[0-9]) /.test(l);
   }
 };
 
-export function Calculator({ rows, defaultHorizon, cpiYoy }: Props) {
+const CURRENCY_SYMBOL: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  Mixed: "$",
+};
+
+export function Calculator({ rows, defaultHorizon, regionData }: Props) {
+  const sym = CURRENCY_SYMBOL[regionData.currency] ?? "$";
+  const tax = regionData.taxModel;
+
   const [amount, setAmount] = useState(10000);
   const [horizon, setHorizon] = useState<Horizon>(defaultHorizon);
   const [taxAdjusted, setTaxAdjusted] = useState(true);
-  const [federalRate, setFederalRate] = useState(24);
-  const [stateRate, setStateRate] = useState(5);
+  const [primaryRate, setPrimaryRate] = useState(tax.primaryDefault);
+  const [secondaryRate, setSecondaryRate] = useState(tax.secondaryDefault);
   const [realAdjusted, setRealAdjusted] = useState(false);
+
+  // Reset tax defaults when region changes.
+  useEffect(() => {
+    setPrimaryRate(tax.primaryDefault);
+    setSecondaryRate(tax.secondaryDefault);
+  }, [regionData.currency, tax.primaryDefault, tax.secondaryDefault]);
+
+  // Sync horizon with the picker above.
+  useEffect(() => {
+    setHorizon(defaultHorizon);
+  }, [defaultHorizon]);
 
   const years = HORIZON_TO_YEARS[horizon];
 
@@ -54,30 +75,31 @@ export function Calculator({ rows, defaultHorizon, cpiYoy }: Props) {
   );
 
   const computed = useMemo(() => {
-    return candidates.map((r) => {
-      const headlineApy = r.apy / 100;
-      // Effective tax rate: federal always; state only if not Treasury/state-tax-free.
-      const effectiveTax = taxAdjusted
-        ? federalRate / 100 + (r.stateTaxFree ? 0 : stateRate / 100)
-        : 0;
-      const realDrag = realAdjusted ? cpiYoy / 100 : 0;
-      const netRate = headlineApy * (1 - effectiveTax) - realDrag;
-      // Compounding: continuous compounding for ETFs/MMFs, simple for bills <1y
-      const value =
-        years < 1
-          ? amount * (1 + netRate * years)
-          : amount * Math.pow(1 + netRate, years);
-      return {
-        vehicle: r.vehicle,
-        coverage: r.coverage,
-        apy: r.apy,
-        netRate: netRate * 100,
-        gain: value - amount,
-        value,
-        stateTaxFree: r.stateTaxFree,
-      };
-    }).sort((a, b) => b.value - a.value);
-  }, [candidates, amount, years, taxAdjusted, federalRate, stateRate, realAdjusted, cpiYoy]);
+    return candidates
+      .map((r) => {
+        const headlineApy = r.apy / 100;
+        const effTax = taxAdjusted
+          ? primaryRate / 100 +
+            (r.secondaryTaxFree ? 0 : (tax.secondaryLabel ? secondaryRate / 100 : 0))
+          : 0;
+        const realDrag = realAdjusted ? regionData.cpiYoy / 100 : 0;
+        const netRate = headlineApy * (1 - effTax) - realDrag;
+        const value =
+          years < 1
+            ? amount * (1 + netRate * years)
+            : amount * Math.pow(1 + netRate, years);
+        return {
+          vehicle: r.vehicle,
+          coverage: r.coverage,
+          apy: r.apy,
+          netRate: netRate * 100,
+          gain: value - amount,
+          value,
+          secondaryTaxFree: r.secondaryTaxFree,
+        };
+      })
+      .sort((a, b) => b.value - a.value);
+  }, [candidates, amount, years, taxAdjusted, primaryRate, secondaryRate, realAdjusted, regionData.cpiYoy, tax.secondaryLabel]);
 
   const top = computed[0];
   const wedge = computed[computed.length - 1];
@@ -87,12 +109,18 @@ export function Calculator({ rows, defaultHorizon, cpiYoy }: Props) {
       <div className="flex items-center gap-1.5">
         <CalcIcon size={13} className="text-accent" />
         <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-fg-subtle">
-          Calculator — what does $X earn?
+          Calculator — what does {sym}X earn?
         </h3>
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <NumberField label="Amount (USD)" value={amount} onChange={setAmount} prefix="$" step={500} />
+        <NumberField
+          label={`Amount (${regionData.currency === "Mixed" ? "USD" : regionData.currency})`}
+          value={amount}
+          onChange={setAmount}
+          prefix={sym}
+          step={500}
+        />
         <SelectField
           label="Horizon"
           value={horizon}
@@ -104,16 +132,35 @@ export function Calculator({ rows, defaultHorizon, cpiYoy }: Props) {
             ["5y+", "7 years"],
           ]}
         />
-        <NumberField label="Federal tax %" value={federalRate} onChange={setFederalRate} disabled={!taxAdjusted} step={1} />
-        <NumberField label="State tax %" value={stateRate} onChange={setStateRate} disabled={!taxAdjusted} step={1} />
+        <NumberField
+          label={tax.primaryLabel}
+          value={primaryRate}
+          onChange={setPrimaryRate}
+          disabled={!taxAdjusted}
+          step={1}
+        />
+        {tax.secondaryLabel ? (
+          <NumberField
+            label={tax.secondaryLabel}
+            value={secondaryRate}
+            onChange={setSecondaryRate}
+            disabled={!taxAdjusted}
+            step={1}
+          />
+        ) : (
+          <div className="hidden sm:block" />
+        )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2 text-[12px]">
         <Toggle label="Tax-adjusted" on={taxAdjusted} onChange={setTaxAdjusted} />
-        <Toggle label={`Inflation-adjusted (CPI ${cpiYoy.toFixed(1)}%)`} on={realAdjusted} onChange={setRealAdjusted} />
+        <Toggle
+          label={`Inflation-adjusted (${regionData.cpiLabel} ${regionData.cpiYoy.toFixed(1)}%)`}
+          on={realAdjusted}
+          onChange={setRealAdjusted}
+        />
       </div>
 
-      {/* Results */}
       <div className="mt-4 scroll-x rounded-md border border-border">
         <table className="w-full text-[12.5px]">
           <thead>
@@ -128,63 +175,76 @@ export function Calculator({ rows, defaultHorizon, cpiYoy }: Props) {
             </tr>
           </thead>
           <tbody>
-            {computed.map((c, i) => (
-              <tr
-                key={c.vehicle}
-                className={[
-                  "border-b border-border last:border-0",
-                  i === 0 ? "bg-accent/8" : "",
-                ].join(" ")}
-              >
-                <td className="px-3 py-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-medium text-fg">{c.vehicle}</span>
-                    {i === 0 && (
-                      <span className="rounded-full border border-accent/40 bg-accent/10 px-1.5 py-px text-[9.5px] font-medium uppercase tracking-wider text-accent">
-                        Best
-                      </span>
-                    )}
-                    {c.stateTaxFree && taxAdjusted && (
-                      <span className="rounded border border-positive/30 bg-positive/10 px-1 py-px text-[9px] uppercase tracking-wider text-positive">
-                        State-tax-free
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-3 py-2 text-right tabular text-fg-muted">{c.apy.toFixed(2)}%</td>
-                <td className={`px-3 py-2 text-right tabular ${c.netRate < 0 ? "text-danger" : "text-fg"}`}>
-                  {c.netRate.toFixed(2)}%
-                </td>
-                <td className={`px-3 py-2 text-right tabular ${c.gain < 0 ? "text-danger" : "text-positive"}`}>
-                  {c.gain >= 0 ? "+" : ""}${Math.round(c.gain).toLocaleString()}
-                </td>
-                <td className="px-3 py-2 text-right tabular font-semibold">
-                  ${Math.round(c.value).toLocaleString()}
+            {computed.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="px-3 py-4 text-center text-fg-subtle">
+                  No vehicles match this horizon. Pick a different bucket.
                 </td>
               </tr>
-            ))}
+            ) : (
+              computed.map((c, i) => (
+                <tr
+                  key={c.vehicle}
+                  className={[
+                    "border-b border-border last:border-0",
+                    i === 0 ? "bg-accent/8" : "",
+                  ].join(" ")}
+                >
+                  <td className="px-3 py-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-medium text-fg">{c.vehicle}</span>
+                      {i === 0 && (
+                        <span className="rounded-full border border-accent/40 bg-accent/10 px-1.5 py-px text-[9.5px] font-medium uppercase tracking-wider text-accent">
+                          Best
+                        </span>
+                      )}
+                      {c.secondaryTaxFree && taxAdjusted && tax.secondaryLabel && (
+                        <span className="rounded border border-positive/30 bg-positive/10 px-1 py-px text-[9px] uppercase tracking-wider text-positive">
+                          {tax.exemptBadge}
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-3 py-2 text-right tabular text-fg-muted">{c.apy.toFixed(2)}%</td>
+                  <td className={`px-3 py-2 text-right tabular ${c.netRate < 0 ? "text-danger" : "text-fg"}`}>
+                    {c.netRate.toFixed(2)}%
+                  </td>
+                  <td className={`px-3 py-2 text-right tabular ${c.gain < 0 ? "text-danger" : "text-positive"}`}>
+                    {c.gain >= 0 ? "+" : ""}{sym}{Math.round(c.gain).toLocaleString()}
+                  </td>
+                  <td className="px-3 py-2 text-right tabular font-semibold">
+                    {sym}{Math.round(c.value).toLocaleString()}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Summary */}
-      {top && wedge && (
+      {top && wedge && top !== wedge && (
         <div className="mt-3 flex items-start gap-2 rounded-md border border-border bg-surface-2 px-3 py-2 text-[12px] text-fg-muted">
           <Info size={13} className="mt-0.5 shrink-0 text-accent" />
           <p>
-            For ${amount.toLocaleString()} over {HORIZON_LABEL[horizon]},{" "}
+            For {sym}{amount.toLocaleString()} over {HORIZON_LABEL[horizon]},{" "}
             <span className="font-semibold text-fg">{top.vehicle}</span> ends at{" "}
-            <span className="tabular text-fg">${Math.round(top.value).toLocaleString()}</span>{" "}
+            <span className="tabular text-fg">{sym}{Math.round(top.value).toLocaleString()}</span>{" "}
             — that's{" "}
             <span className="tabular font-semibold text-positive">
-              ${Math.round(top.value - wedge.value).toLocaleString()} more
+              {sym}{Math.round(top.value - wedge.value).toLocaleString()} more
             </span>{" "}
             than {wedge.vehicle}, the worst pick at this horizon.
-            {taxAdjusted && top.stateTaxFree && (
-              <> The state-tax-free advantage on Treasuries explains most of the spread.</>
+            {taxAdjusted && top.secondaryTaxFree && tax.secondaryLabel && (
+              <> The {tax.exemptBadge.toLowerCase()} advantage explains most of the spread.</>
             )}
           </p>
         </div>
+      )}
+
+      {tax.taxNote && (
+        <p className="mt-2 text-[11px] text-fg-subtle leading-snug">
+          {tax.taxNote}
+        </p>
       )}
     </section>
   );

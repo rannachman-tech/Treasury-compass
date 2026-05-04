@@ -37,19 +37,33 @@ export function ConnectEtoroModal({ open, onClose }: Props) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    const trimmedApi = apiKey.trim();
+    const trimmedUser = userKey.trim();
+    if (!trimmedApi && !trimmedUser) {
+      setErr("Please enter both keys.");
+      return;
+    }
+    if (!trimmedApi) {
+      setErr("Public API Key is required.");
+      return;
+    }
+    if (!trimmedUser) {
+      setErr("Private Key is required.");
+      return;
+    }
     setBusy(true);
     setErr(null);
     try {
       const res = await fetch("/api/etoro/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey, userKey }),
+        body: JSON.stringify({ apiKey: trimmedApi, userKey: trimmedUser }),
       });
       const json = await res.json();
       if (!res.ok || !json.ok) throw new Error(json?.error ?? `HTTP ${res.status}`);
       saveEtoroSession({
-        apiKey,
-        userKey,
+        apiKey: trimmedApi,
+        userKey: trimmedUser,
         env: json.detectedEnv,
         username: json.profile.username,
         cid: json.profile.cid,
@@ -99,13 +113,13 @@ export function ConnectEtoroModal({ open, onClose }: Props) {
           <Field
             label="Public API Key"
             value={apiKey}
-            onChange={setApiKey}
+            onChange={(v) => { setApiKey(v); if (err) setErr(null); }}
             placeholder="UUID-style"
           />
           <Field
             label="Private Key"
             value={userKey}
-            onChange={setUserKey}
+            onChange={(v) => { setUserKey(v); if (err) setErr(null); }}
             placeholder="UUID-style"
             type="password"
           />
@@ -140,7 +154,7 @@ export function ConnectEtoroModal({ open, onClose }: Props) {
             </button>
             <button
               type="submit"
-              disabled={busy || !apiKey || !userKey}
+              disabled={busy}
               className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-[12.5px] font-medium text-bg hover:brightness-110 disabled:opacity-50"
             >
               {busy ? (

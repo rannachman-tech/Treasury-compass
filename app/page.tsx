@@ -57,7 +57,6 @@ export default function Home() {
   const [connectOpen, setConnectOpen] = useState(false);
   const [session, setSession] = useState<EtoroSession | null>(null);
 
-  // Restore prefs on mount.
   useEffect(() => {
     const p = loadPrefs();
     setHorizon(p.horizon);
@@ -65,7 +64,6 @@ export default function Home() {
     setInflationAdjusted(p.inflationAdjusted);
   }, []);
 
-  // Persist on change.
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -75,7 +73,6 @@ export default function Home() {
     } catch {}
   }, [horizon, region, inflationAdjusted]);
 
-  // Sync session with cross-component custom event.
   useEffect(() => {
     setSession(loadEtoroSession());
     const h = () => setSession(loadEtoroSession());
@@ -83,6 +80,7 @@ export default function Home() {
     return () => window.removeEventListener("tyc-etoro-changed", h);
   }, []);
 
+  const regionData = data.regions[region];
   const basket = useMemo(() => basketFor(horizon, region), [horizon, region]);
 
   return (
@@ -94,7 +92,7 @@ export default function Home() {
         {/* Top row — region tabs + sources */}
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <RegionTabs value={region} onChange={setRegion} />
-          <LiveSourcesRow generatedAt={data.generatedAt} sources={data.sources} />
+          <LiveSourcesRow generatedAt={data.generatedAt} sources={regionData.sources} />
         </div>
 
         {/* Horizon picker + inflation toggle */}
@@ -108,8 +106,8 @@ export default function Home() {
           <InflationToggle
             on={inflationAdjusted}
             onChange={setInflationAdjusted}
-            label={`Inflation-adjusted · CPI ${data.cpiYoy.toFixed(1)}%`}
-            hint="Subtract CPI year-over-year from displayed yields"
+            label={`Inflation-adjusted · ${regionData.cpiLabel} ${regionData.cpiYoy.toFixed(1)}%`}
+            hint={`Subtract ${regionData.cpiLabel} year-over-year from displayed yields`}
           />
         </div>
 
@@ -119,18 +117,18 @@ export default function Home() {
           <div className="rounded-lg border border-border bg-surface paper p-4 sm:p-5 flex flex-col">
             <div className="flex items-center justify-between">
               <h2 className="text-[11px] font-mono uppercase tracking-[0.2em] text-fg-subtle">
-                Yield ladder · {region.toUpperCase()}
+                Yield ladder · {region.toUpperCase()} · {regionData.currency}
               </h2>
               <span className="text-[11px] tabular text-fg-subtle">
-                Fed Funds {data.fedFunds.toFixed(2)}%
+                {regionData.policyRateLabel} {regionData.policyRate.toFixed(2)}%
               </span>
             </div>
             <div className="mt-4">
               <YieldLadder
-                rungs={data.rungs}
+                rungs={regionData.rungs}
                 activeHorizon={horizon}
                 inflationAdjusted={inflationAdjusted}
-                cpiYoy={data.cpiYoy}
+                cpiYoy={regionData.cpiYoy}
                 onRungClick={(r) => setHorizon(r.horizon)}
               />
             </div>
@@ -140,21 +138,22 @@ export default function Home() {
                 <span>Yield curve · today vs last week</span>
                 <span className="not-italic text-fg-subtle/80">— prev — today</span>
               </div>
-              <YieldCurveChart curve={data.curve} activeHorizon={horizon} />
+              <YieldCurveChart curve={regionData.curve} activeHorizon={horizon} />
             </div>
           </div>
 
           {/* RIGHT — insights + trade CTA */}
           <div className="flex flex-col gap-4">
             <InsightsCard
+              region={region}
               horizon={horizon}
-              rungs={data.rungs}
-              data={data}
+              regionData={regionData}
               inflationAdjusted={inflationAdjusted}
             />
             <TradeCta
               basket={basket}
               horizon={horizon}
+              regionData={regionData}
               onTrade={() => setTradeOpen(true)}
             />
           </div>
@@ -162,21 +161,21 @@ export default function Home() {
 
         {/* Comparator table */}
         <div className="mt-6">
-          <ComparatorTable rows={data.comparator} activeHorizon={horizon} />
+          <ComparatorTable rows={regionData.comparator} activeHorizon={horizon} />
         </div>
 
         {/* Calculator */}
         <div className="mt-6">
           <Calculator
-            rows={data.comparator}
+            rows={regionData.comparator}
             defaultHorizon={horizon}
-            cpiYoy={data.cpiYoy}
+            regionData={regionData}
           />
         </div>
 
         {/* Deep history */}
         <div className="mt-6">
-          <DeepHistoryChart history={data.history} />
+          <DeepHistoryChart history={regionData.history} policyRateLabel={regionData.policyRateLabel} />
         </div>
       </main>
 

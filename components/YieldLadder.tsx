@@ -207,9 +207,24 @@ function CoverageBadge({
         label: "Treasury",
         cls: "bg-positive/12 border-positive/30 text-positive",
       },
+      Sovereign: {
+        icon: <Landmark size={10} />,
+        label: "Sovereign",
+        cls: "bg-positive/12 border-positive/30 text-positive",
+      },
       FDIC: {
         icon: <ShieldCheck size={10} />,
         label: "FDIC",
+        cls: "bg-positive/10 border-positive/25 text-positive",
+      },
+      FSCS: {
+        icon: <ShieldCheck size={10} />,
+        label: "FSCS",
+        cls: "bg-positive/10 border-positive/25 text-positive",
+      },
+      "Deposit-EU": {
+        icon: <ShieldCheck size={10} />,
+        label: "EU Deposit",
         cls: "bg-positive/10 border-positive/25 text-positive",
       },
       SIPC: {
