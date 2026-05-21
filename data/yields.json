@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-20T22:24:25.471Z",
+  "generatedAt": "2026-05-21T22:20:00.117Z",
   "regions": {
     "us": {
       "currency": "USD",
-      "policyRate": 3.64,
+      "policyRate": 3.63,
       "policyRateLabel": "Fed Funds",
       "cpiYoy": -2.32,
       "cpiLabel": "CPI",
@@ -24,8 +24,8 @@
       "curve": [
         {
           "maturity": 0.083,
-          "yield": 3.64,
-          "prevYield": 3.64
+          "yield": 3.63,
+          "prevYield": 3.63
         },
         {
           "maturity": 0.25,
@@ -39,8 +39,8 @@
         },
         {
           "maturity": 1,
-          "yield": 3.72,
-          "prevYield": 3.72
+          "yield": 3.73,
+          "prevYield": 3.73
         },
         {
           "maturity": 2,
@@ -64,18 +64,18 @@
         },
         {
           "maturity": 10,
-          "yield": 4.4,
-          "prevYield": 4.4
+          "yield": 4.39,
+          "prevYield": 4.39
         },
         {
           "maturity": 20,
-          "yield": 4.97,
-          "prevYield": 4.97
+          "yield": 4.96,
+          "prevYield": 4.96
         },
         {
           "maturity": 30,
-          "yield": 4.98,
-          "prevYield": 4.98
+          "yield": 4.97,
+          "prevYield": 4.97
         }
       ],
       "rungs": [
@@ -83,12 +83,12 @@
           "id": "overnight",
           "label": "Overnight",
           "position": 0,
-          "yield": 3.64,
+          "yield": 3.63,
           "horizon": "<3mo",
           "winner": {
             "name": "Treasury MMF (VUSXX)",
             "issuer": "Vanguard",
-            "yield": 3.64,
+            "yield": 3.63,
             "coverage": "MMF",
             "lockup": "Daily liquid",
             "tax": "State-tax-free (Treasury)",
@@ -137,12 +137,12 @@
           "id": "1y",
           "label": "1 year",
           "position": 3,
-          "yield": 3.72,
+          "yield": 3.73,
           "horizon": "3-12mo",
           "winner": {
             "name": "52-week T-bill",
             "issuer": "U.S. Treasury",
-            "yield": 3.72,
+            "yield": 3.73,
             "coverage": "Treasury",
             "lockup": "364 days",
             "tax": "State-tax-free",
@@ -191,12 +191,12 @@
           "id": "10y",
           "label": "10 years",
           "position": 6,
-          "yield": 4.4,
+          "yield": 4.39,
           "horizon": "5y+",
           "winner": {
             "name": "10-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.4,
+            "yield": 4.39,
             "coverage": "Treasury",
             "lockup": "10 years",
             "tax": "State-tax-free",
@@ -602,25 +602,32 @@
           "y2": 3.88,
           "y10": 4.4,
           "policyRate": 3.64
+        },
+        {
+          "date": "2026-05-21",
+          "m3": 3.68,
+          "y2": 3.88,
+          "y10": 4.39,
+          "policyRate": 3.63
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.167Z",
+          "lastUpdate": "2026-05-21T22:19:59.944Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.167Z",
+          "lastUpdate": "2026-05-21T22:19:59.944Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.167Z",
+          "lastUpdate": "2026-05-21T22:19:59.944Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1146,26 +1153,26 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.322Z",
+          "lastUpdate": "2026-05-21T22:20:00.019Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.322Z",
+          "lastUpdate": "2026-05-21T22:20:00.019Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.322Z",
+          "lastUpdate": "2026-05-21T22:20:00.019Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
     },
     "uk": {
       "currency": "GBP",
-      "policyRate": 3.7298,
+      "policyRate": 3.7299,
       "policyRateLabel": "BoE Bank Rate",
       "cpiYoy": 2.5,
       "cpiLabel": "CPI",
@@ -1684,19 +1691,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2222,19 +2229,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-05-20T22:24:25.471Z",
+          "lastUpdate": "2026-05-21T22:20:00.117Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
