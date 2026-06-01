@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-29T22:37:46.358Z",
+  "generatedAt": "2026-06-01T23:02:56.336Z",
   "regions": {
     "us": {
       "currency": "USD",
@@ -39,8 +39,8 @@
         },
         {
           "maturity": 1,
-          "yield": 3.79,
-          "prevYield": 3.79
+          "yield": 3.8,
+          "prevYield": 3.8
         },
         {
           "maturity": 2,
@@ -137,12 +137,12 @@
           "id": "1y",
           "label": "1 year",
           "position": 3,
-          "yield": 3.79,
+          "yield": 3.8,
           "horizon": "3-12mo",
           "winner": {
             "name": "52-week T-bill",
             "issuer": "U.S. Treasury",
-            "yield": 3.79,
+            "yield": 3.8,
             "coverage": "Treasury",
             "lockup": "364 days",
             "tax": "State-tax-free",
@@ -651,25 +651,32 @@
           "y2": 3.95,
           "y10": 4.42,
           "policyRate": 3.63
+        },
+        {
+          "date": "2026-06-01",
+          "m3": 3.7,
+          "y2": 3.95,
+          "y10": 4.42,
+          "policyRate": 3.63
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.045Z",
+          "lastUpdate": "2026-06-01T23:02:55.934Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.045Z",
+          "lastUpdate": "2026-06-01T23:02:55.934Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.045Z",
+          "lastUpdate": "2026-06-01T23:02:55.934Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1195,19 +1202,19 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.212Z",
+          "lastUpdate": "2026-06-01T23:02:56.136Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.212Z",
+          "lastUpdate": "2026-06-01T23:02:56.136Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.212Z",
+          "lastUpdate": "2026-06-01T23:02:56.136Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
@@ -1733,19 +1740,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2271,19 +2278,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-05-29T22:37:46.358Z",
+          "lastUpdate": "2026-06-01T23:02:56.336Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
