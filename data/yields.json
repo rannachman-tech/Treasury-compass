@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-12T22:25:03.026Z",
+  "generatedAt": "2026-06-15T23:03:12.603Z",
   "regions": {
     "us": {
       "currency": "USD",
@@ -35,17 +35,17 @@
         {
           "maturity": 0.5,
           "yield": 3.8,
-          "prevYield": 3.8
+          "prevYield": 3.79
         },
         {
           "maturity": 1,
           "yield": 3.82,
-          "prevYield": 3.82
+          "prevYield": 3.8
         },
         {
           "maturity": 2,
           "yield": 4.01,
-          "prevYield": 4.01
+          "prevYield": 4
         },
         {
           "maturity": 3,
@@ -55,7 +55,7 @@
         {
           "maturity": 5,
           "yield": 4.19,
-          "prevYield": 4.19
+          "prevYield": 4.17
         },
         {
           "maturity": 7,
@@ -65,7 +65,7 @@
         {
           "maturity": 10,
           "yield": 4.5,
-          "prevYield": 4.5
+          "prevYield": 4.48
         },
         {
           "maturity": 20,
@@ -721,25 +721,32 @@
           "y2": 4.01,
           "y10": 4.5,
           "policyRate": 3.62
+        },
+        {
+          "date": "2026-06-15",
+          "m3": 3.68,
+          "y2": 4.01,
+          "y10": 4.5,
+          "policyRate": 3.62
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.635Z",
+          "lastUpdate": "2026-06-15T23:03:12.224Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.635Z",
+          "lastUpdate": "2026-06-15T23:03:12.224Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.635Z",
+          "lastUpdate": "2026-06-15T23:03:12.224Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1265,26 +1272,26 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.827Z",
+          "lastUpdate": "2026-06-15T23:03:12.406Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.827Z",
+          "lastUpdate": "2026-06-15T23:03:12.406Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:02.827Z",
+          "lastUpdate": "2026-06-15T23:03:12.406Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
     },
     "uk": {
       "currency": "GBP",
-      "policyRate": 3.7301,
+      "policyRate": 3.729,
       "policyRateLabel": "BoE Bank Rate",
       "cpiYoy": 2.5,
       "cpiLabel": "CPI",
@@ -1803,19 +1810,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2341,19 +2348,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-06-12T22:25:03.026Z",
+          "lastUpdate": "2026-06-15T23:03:12.603Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
