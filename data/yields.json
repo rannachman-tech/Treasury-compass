@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-18T22:56:11.601Z",
+  "generatedAt": "2026-06-19T22:04:18.568Z",
   "regions": {
     "us": {
       "currency": "USD",
@@ -749,25 +749,32 @@
           "y2": 3.98,
           "y10": 4.45,
           "policyRate": 3.62
+        },
+        {
+          "date": "2026-06-19",
+          "m3": 3.69,
+          "y2": 3.98,
+          "y10": 4.45,
+          "policyRate": 3.62
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.141Z",
+          "lastUpdate": "2026-06-19T22:04:18.172Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.141Z",
+          "lastUpdate": "2026-06-19T22:04:18.172Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.141Z",
+          "lastUpdate": "2026-06-19T22:04:18.172Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1293,26 +1300,26 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.318Z",
+          "lastUpdate": "2026-06-19T22:04:18.342Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.318Z",
+          "lastUpdate": "2026-06-19T22:04:18.342Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.318Z",
+          "lastUpdate": "2026-06-19T22:04:18.342Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
     },
     "uk": {
       "currency": "GBP",
-      "policyRate": 3.7295,
+      "policyRate": 3.7302,
       "policyRateLabel": "BoE Bank Rate",
       "cpiYoy": 2.5,
       "cpiLabel": "CPI",
@@ -1831,19 +1838,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2369,19 +2376,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-06-18T22:56:11.601Z",
+          "lastUpdate": "2026-06-19T22:04:18.568Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
