@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T22:18:29.163Z",
+  "generatedAt": "2026-06-25T22:21:34.904Z",
   "regions": {
     "us": {
       "currency": "USD",
@@ -34,48 +34,48 @@
         },
         {
           "maturity": 0.5,
-          "yield": 3.78,
-          "prevYield": 3.78
+          "yield": 3.81,
+          "prevYield": 3.81
         },
         {
           "maturity": 1,
-          "yield": 3.82,
-          "prevYield": 3.82
+          "yield": 3.88,
+          "prevYield": 3.88
         },
         {
           "maturity": 2,
-          "yield": 4.05,
-          "prevYield": 4.05
+          "yield": 4.17,
+          "prevYield": 4.17
         },
         {
           "maturity": 3,
-          "yield": 4.1,
-          "prevYield": 4.1
+          "yield": 4.22,
+          "prevYield": 4.22
         },
         {
           "maturity": 5,
-          "yield": 4.18,
-          "prevYield": 4.18
+          "yield": 4.29,
+          "prevYield": 4.29
         },
         {
           "maturity": 7,
-          "yield": 4.32,
-          "prevYield": 4.32
+          "yield": 4.41,
+          "prevYield": 4.41
         },
         {
           "maturity": 10,
-          "yield": 4.47,
-          "prevYield": 4.47
+          "yield": 4.55,
+          "prevYield": 4.55
         },
         {
           "maturity": 20,
-          "yield": 4.98,
-          "prevYield": 4.98
+          "yield": 5.03,
+          "prevYield": 5.03
         },
         {
           "maturity": 30,
-          "yield": 4.97,
-          "prevYield": 4.97
+          "yield": 5.01,
+          "prevYield": 5.01
         }
       ],
       "rungs": [
@@ -119,12 +119,12 @@
           "id": "6mo",
           "label": "6 months",
           "position": 2,
-          "yield": 3.78,
+          "yield": 3.81,
           "horizon": "3-12mo",
           "winner": {
             "name": "26-week T-bill",
             "issuer": "U.S. Treasury",
-            "yield": 3.78,
+            "yield": 3.81,
             "coverage": "Treasury",
             "lockup": "182 days",
             "tax": "State-tax-free",
@@ -137,12 +137,12 @@
           "id": "1y",
           "label": "1 year",
           "position": 3,
-          "yield": 3.82,
+          "yield": 3.88,
           "horizon": "3-12mo",
           "winner": {
             "name": "52-week T-bill",
             "issuer": "U.S. Treasury",
-            "yield": 3.82,
+            "yield": 3.88,
             "coverage": "Treasury",
             "lockup": "364 days",
             "tax": "State-tax-free",
@@ -155,12 +155,12 @@
           "id": "2y",
           "label": "2 years",
           "position": 4,
-          "yield": 4.05,
+          "yield": 4.17,
           "horizon": "1-5y",
           "winner": {
             "name": "2-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.05,
+            "yield": 4.17,
             "coverage": "Treasury",
             "lockup": "2 years",
             "tax": "State-tax-free",
@@ -173,12 +173,12 @@
           "id": "5y",
           "label": "5 years",
           "position": 5,
-          "yield": 4.18,
+          "yield": 4.29,
           "horizon": "1-5y",
           "winner": {
             "name": "5-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.18,
+            "yield": 4.29,
             "coverage": "Treasury",
             "lockup": "5 years",
             "tax": "State-tax-free",
@@ -191,12 +191,12 @@
           "id": "10y",
           "label": "10 years",
           "position": 6,
-          "yield": 4.47,
+          "yield": 4.55,
           "horizon": "5y+",
           "winner": {
             "name": "10-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.47,
+            "yield": 4.55,
             "coverage": "Treasury",
             "lockup": "10 years",
             "tax": "State-tax-free",
@@ -777,25 +777,32 @@
           "y2": 4.05,
           "y10": 4.47,
           "policyRate": 3.62
+        },
+        {
+          "date": "2026-06-25",
+          "m3": 3.78,
+          "y2": 4.17,
+          "y10": 4.55,
+          "policyRate": 3.62
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.689Z",
+          "lastUpdate": "2026-06-25T22:21:34.122Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.689Z",
+          "lastUpdate": "2026-06-25T22:21:34.122Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.689Z",
+          "lastUpdate": "2026-06-25T22:21:34.122Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1321,26 +1328,26 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.903Z",
+          "lastUpdate": "2026-06-25T22:21:34.590Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.903Z",
+          "lastUpdate": "2026-06-25T22:21:34.590Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:28.903Z",
+          "lastUpdate": "2026-06-25T22:21:34.590Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
     },
     "uk": {
       "currency": "GBP",
-      "policyRate": 3.7306,
+      "policyRate": 3.7308,
       "policyRateLabel": "BoE Bank Rate",
       "cpiYoy": 2.5,
       "cpiLabel": "CPI",
@@ -1859,19 +1866,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2397,19 +2404,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-06-24T22:18:29.163Z",
+          "lastUpdate": "2026-06-25T22:21:34.904Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
