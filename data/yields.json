@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T21:54:45.347Z",
+  "generatedAt": "2026-07-20T22:00:50.471Z",
   "regions": {
     "us": {
       "currency": "USD",
@@ -35,37 +35,37 @@
         {
           "maturity": 0.5,
           "yield": 4,
-          "prevYield": 4
+          "prevYield": 4.01
         },
         {
           "maturity": 1,
           "yield": 3.97,
-          "prevYield": 3.97
+          "prevYield": 3.98
         },
         {
           "maturity": 2,
-          "yield": 4.1,
-          "prevYield": 4.1
-        },
-        {
-          "maturity": 3,
-          "yield": 4.1,
-          "prevYield": 4.1
-        },
-        {
-          "maturity": 5,
           "yield": 4.14,
           "prevYield": 4.14
         },
         {
+          "maturity": 3,
+          "yield": 4.15,
+          "prevYield": 4.15
+        },
+        {
+          "maturity": 5,
+          "yield": 4.19,
+          "prevYield": 4.19
+        },
+        {
           "maturity": 7,
-          "yield": 4.24,
-          "prevYield": 4.24
+          "yield": 4.3,
+          "prevYield": 4.3
         },
         {
           "maturity": 10,
-          "yield": 4.38,
-          "prevYield": 4.38
+          "yield": 4.44,
+          "prevYield": 4.44
         },
         {
           "maturity": 20,
@@ -74,8 +74,8 @@
         },
         {
           "maturity": 30,
-          "yield": 4.86,
-          "prevYield": 4.86
+          "yield": 4.91,
+          "prevYield": 4.91
         }
       ],
       "rungs": [
@@ -155,12 +155,12 @@
           "id": "2y",
           "label": "2 years",
           "position": 4,
-          "yield": 4.1,
+          "yield": 4.14,
           "horizon": "1-5y",
           "winner": {
             "name": "2-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.1,
+            "yield": 4.14,
             "coverage": "Treasury",
             "lockup": "2 years",
             "tax": "State-tax-free",
@@ -173,12 +173,12 @@
           "id": "5y",
           "label": "5 years",
           "position": 5,
-          "yield": 4.14,
+          "yield": 4.19,
           "horizon": "1-5y",
           "winner": {
             "name": "5-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.14,
+            "yield": 4.19,
             "coverage": "Treasury",
             "lockup": "5 years",
             "tax": "State-tax-free",
@@ -191,12 +191,12 @@
           "id": "10y",
           "label": "10 years",
           "position": 6,
-          "yield": 4.38,
+          "yield": 4.44,
           "horizon": "5y+",
           "winner": {
             "name": "10-year Treasury Note",
             "issuer": "U.S. Treasury",
-            "yield": 4.38,
+            "yield": 4.44,
             "coverage": "Treasury",
             "lockup": "10 years",
             "tax": "State-tax-free",
@@ -896,25 +896,32 @@
           "y2": 4.1,
           "y10": 4.38,
           "policyRate": 3.63
+        },
+        {
+          "date": "2026-07-20",
+          "m3": 3.87,
+          "y2": 4.14,
+          "y10": 4.44,
+          "policyRate": 3.63
         }
       ],
       "sources": [
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.738Z",
+          "lastUpdate": "2026-07-20T22:00:29.179Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "TreasuryDirect",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.738Z",
+          "lastUpdate": "2026-07-20T22:00:29.179Z",
           "url": "https://treasurydirect.gov"
         },
         {
           "name": "FDIC",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.738Z",
+          "lastUpdate": "2026-07-20T22:00:29.179Z",
           "url": "https://www.fdic.gov"
         }
       ]
@@ -1440,26 +1447,26 @@
         {
           "name": "ECB (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.981Z",
+          "lastUpdate": "2026-07-20T22:00:41.865Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "Bundesbank",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.981Z",
+          "lastUpdate": "2026-07-20T22:00:41.865Z",
           "url": "https://www.bundesbank.de"
         },
         {
           "name": "Finanzagentur",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:44.981Z",
+          "lastUpdate": "2026-07-20T22:00:41.865Z",
           "url": "https://www.deutsche-finanzagentur.de"
         }
       ]
     },
     "uk": {
       "currency": "GBP",
-      "policyRate": 3.729,
+      "policyRate": 3.7292,
       "policyRateLabel": "BoE Bank Rate",
       "cpiYoy": 2.5,
       "cpiLabel": "CPI",
@@ -1978,19 +1985,19 @@
         {
           "name": "BoE (via FRED)",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://www.bankofengland.co.uk/statistics"
         },
         {
           "name": "UK DMO",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://www.dmo.gov.uk"
         },
         {
           "name": "FCA / FSCS",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://www.fscs.org.uk"
         }
       ]
@@ -2516,19 +2523,19 @@
         {
           "name": "FRED",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://fred.stlouisfed.org"
         },
         {
           "name": "ECB",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://www.ecb.europa.eu/stats"
         },
         {
           "name": "BoE",
           "status": "live",
-          "lastUpdate": "2026-07-17T21:54:45.347Z",
+          "lastUpdate": "2026-07-20T22:00:50.471Z",
           "url": "https://www.bankofengland.co.uk"
         }
       ]
